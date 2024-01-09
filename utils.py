@@ -16,7 +16,7 @@ class VideoHandler(QObject):
     pause_signal = pyqtSignal()
     resume_signal = pyqtSignal()
 
-    def __init__(self, input_video_path, output_video_path, list_depth, list_frame, start_frame=0, is_superX=False, model_name="ESPCN_x2"):
+    def __init__(self, input_video_path, output_video_path, list_depth, list_frame, start_frame=0, is_superX=False, model_name="ESPCN_x2", background_color=(79, 240, 255), font_color=(0, 0, 0)):
         super().__init__()
 
         self.input_video_path = input_video_path
@@ -37,6 +37,9 @@ class VideoHandler(QObject):
             self.scale = model_scale
         else:
             self.scale = 1
+
+        self.background_color = background_color
+        self.font_color = font_color
 
     # 视频添加水印
     def run(self):
@@ -306,6 +309,13 @@ def show_warning_message_box(text):
     # 显示消息框
     msgBox.exec_()
 
+# 十六进制转为rgb值
+def hex2rgb(hex):
+    return tuple(int(hex[i:i + 2], 16) for i in (0, 2, 4))
+
+# rgb转为16进制
+def rgb2hex(rgb):
+    return '#%02x%02x%02x' % rgb
 
 
 if __name__ == '__main__':

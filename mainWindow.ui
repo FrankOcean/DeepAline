@@ -1297,7 +1297,7 @@
                </size>
               </property>
               <property name="text">
-               <string>#FFFFFF</string>
+               <string>#ffffff</string>
               </property>
              </widget>
             </item>

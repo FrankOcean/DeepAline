@@ -121,6 +121,12 @@ class Modifier(Ui_mainWindow):
         # 更新 self.check_box3 的状态，检测是否符合可点击的状态
         self.checkBox_3.clicked.connect(self.update_state_of_start)
 
+        # 更新背景颜色
+        self.pushButton_4.clicked.connect(self.update_background_color)
+
+        # 更新字体颜色
+        self.pushButton_5.clicked.connect(self.update_font_color)
+
         # 给 self.spinBox 的最大倍速为3,最小为1,默认为1
         self.spinBox.setValue(1)  # 设置默认值为1
         self.spinBox.setMinimum(1)  # 设置最小值为1
@@ -132,6 +138,25 @@ class Modifier(Ui_mainWindow):
         self.picture_tree_widget.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
         self.treeWidget_5.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
 
+    def update_background_color(self):
+        # 调起颜色选择对话框
+        color = QtWidgets.QColorDialog.getColor()
+        if color.isValid():
+            # 将颜色转化为十六进制 #******
+            color = color.name(QtGui.QColor.HexRgb)
+            self.label_6.setProperty("text", "{}".format(color))
+        else:
+            show_warning_message_box("颜色选择器不可用")
+
+    def update_font_color(self):
+        # 调起颜色选择对话框
+        color = QtWidgets.QColorDialog.getColor()
+        if color.isValid():
+            # 将颜色转化为十六进制 #******
+            color = color.name(QtGui.QColor.HexRgb)
+            self.label_8.setProperty("text", "{}".format(color))
+        else:
+            show_warning_message_box("颜色选择器不可用")
 
     def update_state_of_start(self):
 
@@ -668,9 +693,10 @@ class Modifier(Ui_mainWindow):
             if len(list_frame) == 0:
                 return
 
+
             self.video_handler = VideoHandler(self.selected_video_path,
                                               self.save_path + "/" + self.current_video + ".mp4",
-                                              list_depth, list_frame, 0, is_superX, model_name=model_name)
+                                              list_depth, list_frame, 0, is_superX, model_name=model_name, background_color=(), font_color=())
             self.video_handler_thread = QtCore.QThread()
             self.video_handler.moveToThread(self.video_handler_thread)
             # 连接信号与槽
