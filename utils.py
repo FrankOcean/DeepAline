@@ -16,7 +16,7 @@ class VideoHandler(QObject):
     pause_signal = pyqtSignal()
     resume_signal = pyqtSignal()
 
-    def __init__(self, input_video_path, output_video_path, list_depth, list_frame, start_frame=0, is_superX=False, model_name="ESPCN_x2", background_color=(79, 240, 255), font_color=(0, 0, 0)):
+    def __init__(self, input_video_path, output_video_path, list_depth, list_frame, start_frame=0, is_superX=False, model_name="ESPCN_x2"):
         super().__init__()
 
         self.input_video_path = input_video_path
@@ -38,8 +38,9 @@ class VideoHandler(QObject):
         else:
             self.scale = 1
 
-        self.background_color = background_color
-        self.font_color = font_color
+        # TODO: 修改背景和字体颜色
+        # self.background_color = background_color
+        # self.font_color = font_color
 
     # 视频添加水印
     def run(self):

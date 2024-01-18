@@ -1,9 +1,11 @@
+import os
 import sys
 from mainWindow import Ui_mainWindow
 from PyQt5 import QtWidgets, QtGui, QtCore, QtMultimedia
 from utils import *
 import pandas as pd
 
+watermark_save_path = 'deepth/watermark.txt'
 
 class Modifier(Ui_mainWindow):
     def __init__(self):
@@ -696,7 +698,8 @@ class Modifier(Ui_mainWindow):
 
             self.video_handler = VideoHandler(self.selected_video_path,
                                               self.save_path + "/" + self.current_video + ".mp4",
-                                              list_depth, list_frame, 0, is_superX, model_name=model_name, background_color=(), font_color=())
+                                              list_depth, list_frame, 0, is_superX,
+                                              model_name=model_name, background_color=(), font_color=())
             self.video_handler_thread = QtCore.QThread()
             self.video_handler.moveToThread(self.video_handler_thread)
             # 连接信号与槽
@@ -830,6 +833,31 @@ class Modifier(Ui_mainWindow):
         full_path = os.path.join(folder_path, self.current_video + ".xlsx")
         # 将DataFrame保存为excel文件
         df.to_excel(full_path, index=False)
+
+    # 设置-确定
+    def update_video_watermark(self):
+        x = 0
+        y = 0
+        fontsize = 13
+        background_color = "#FFFFFF"
+        font_color = "#000000"
+
+        folder = os.path.dirname(watermark_save_path)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+
+        # 将x, y, fontsize, background_color, font_color, 保存到txt文件中
+        with open(watermark_save_path + "", "w") as f:
+            f.write(str(x) + "\n")
+            f.write(str(y) + "\n")
+            f.write(str(fontsize) + "\n")
+            f.write(str(background_color) + "\n")
+            f.write(str(font_color) + "\n")
+
+    # 设置-重置
+    def resetting_video_watermark(self):
+        if os.path.exists(watermark_save_path):
+            os.remove(watermark_save_path)
 
 
 
