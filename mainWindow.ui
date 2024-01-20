@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>1420</width>
-    <height>874</height>
+    <height>914</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>1420</width>
-    <height>874</height>
+    <height>914</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -24,6 +24,12 @@
 </string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="minimumSize">
+    <size>
+     <width>1420</width>
+     <height>874</height>
+    </size>
+   </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="spacing">
      <number>6</number>
@@ -42,7 +48,7 @@
       <widget class="QFrame" name="frame">
        <property name="minimumSize">
         <size>
-         <width>200</width>
+         <width>250</width>
          <height>0</height>
         </size>
        </property>
@@ -1272,12 +1278,6 @@ border: 1px solid rgb(209,209,209);
          <height>0</height>
         </size>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>450</width>
-         <height>16777215</height>
-        </size>
-       </property>
        <property name="styleSheet">
         <string notr="true">#frame_3.QFrame {
     border-radius: 5px;
@@ -1318,6 +1318,18 @@ border: 1px solid rgb(209,209,209);
            <bool>false</bool>
           </property>
           <widget class="QFrame" name="frame_10">
+           <property name="minimumSize">
+            <size>
+             <width>511</width>
+             <height>485</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>800</width>
+             <height>485</height>
+            </size>
+           </property>
            <property name="styleSheet">
             <string notr="true">background-color: white;
 border: 1px solid gray; 
@@ -1390,8 +1402,10 @@ border-radius:0px;</string>
               </property>
               <property name="styleSheet">
                <string notr="true">QWidget {  
-    background-color: black;  
-}</string>
+    background-color: black;
+	border: 0px;  
+}
+</string>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_15">
                <property name="spacing">
@@ -1724,7 +1738,7 @@ border: 0px solid rgb(209,209,209);
 border-radius:0px;</string>
               </property>
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="tab_1">
                <attribute name="title">
@@ -2072,7 +2086,7 @@ border-radius:0px;</string>
 }</string>
                        </property>
                        <property name="text">
-                        <string>x</string>
+                        <string>x:</string>
                        </property>
                       </widget>
                      </item>
@@ -2080,8 +2094,14 @@ border-radius:0px;</string>
                       <widget class="QLineEdit" name="lineEdit_8">
                        <property name="minimumSize">
                         <size>
-                         <width>0</width>
+                         <width>30</width>
                          <height>30</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>80</width>
+                         <height>16777215</height>
                         </size>
                        </property>
                        <property name="styleSheet">
@@ -2091,6 +2111,9 @@ border-radius:0px;</string>
 	border: 1px solid rgb(209,209,209);
 }
 </string>
+                       </property>
+                       <property name="text">
+                        <string>20</string>
                        </property>
                       </widget>
                      </item>
@@ -2103,7 +2126,7 @@ border-radius:0px;</string>
 }</string>
                        </property>
                        <property name="text">
-                        <string>y</string>
+                        <string>y:</string>
                        </property>
                       </widget>
                      </item>
@@ -2111,8 +2134,14 @@ border-radius:0px;</string>
                       <widget class="QLineEdit" name="lineEdit_9">
                        <property name="minimumSize">
                         <size>
-                         <width>0</width>
+                         <width>30</width>
                          <height>30</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>80</width>
+                         <height>16777215</height>
                         </size>
                        </property>
                        <property name="styleSheet">
@@ -2122,6 +2151,9 @@ border-radius:0px;</string>
 	border: 1px solid rgb(209,209,209);
 }
 </string>
+                       </property>
+                       <property name="text">
+                        <string>20</string>
                        </property>
                       </widget>
                      </item>
@@ -2154,7 +2186,23 @@ border-radius:0px;</string>
 }
 </string>
                        </property>
+                       <property name="text">
+                        <string>13</string>
+                       </property>
                       </widget>
+                     </item>
+                     <item>
+                      <spacer name="horizontalSpacer_10">
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>40</width>
+                         <height>20</height>
+                        </size>
+                       </property>
+                      </spacer>
                      </item>
                     </layout>
                    </item>
@@ -2174,7 +2222,7 @@ border-radius:0px;</string>
                        <property name="maximumSize">
                         <size>
                          <width>16777215</width>
-                         <height>20</height>
+                         <height>30</height>
                         </size>
                        </property>
                        <property name="styleSheet">
@@ -2207,7 +2255,7 @@ border-radius:0px;</string>
 </string>
                        </property>
                        <property name="text">
-                        <string>#000000</string>
+                        <string>#4ff0ff</string>
                        </property>
                       </widget>
                      </item>
@@ -2216,7 +2264,7 @@ border-radius:0px;</string>
                        <property name="maximumSize">
                         <size>
                          <width>16777215</width>
-                         <height>20</height>
+                         <height>30</height>
                         </size>
                        </property>
                        <property name="styleSheet">
@@ -2249,7 +2297,7 @@ border-radius:0px;</string>
 </string>
                        </property>
                        <property name="text">
-                        <string>#ffffff</string>
+                        <string>#000000</string>
                        </property>
                       </widget>
                      </item>
@@ -2258,7 +2306,7 @@ border-radius:0px;</string>
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
-                         <height>20</height>
+                         <height>30</height>
                         </size>
                        </property>
                        <property name="styleSheet">
@@ -2279,7 +2327,7 @@ border-radius:0px;</string>
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
-                         <height>20</height>
+                         <height>30</height>
                         </size>
                        </property>
                        <property name="styleSheet">

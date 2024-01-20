@@ -55,9 +55,6 @@ class Modifier(Ui_mainWindow):
         # clearbutton清空事件
         self.clearButton.clicked.connect(self.clear_file)
 
-        # 当选中 self.picture_tree_widget的item时
-        self.picture_tree_widget.itemClicked.connect(self.picture_widget_item_selected)
-
         # 当选中 self.video_tree_widget的item时
         self.video_tree_widget.itemClicked.connect(self.video_widget_item_selected)
 
@@ -112,8 +109,6 @@ class Modifier(Ui_mainWindow):
         # 删除选中行
         self.pushButton_2.clicked.connect(self.delete_seleted_row)
 
-        self.label_24.setProperty("text", "已添加接箍数0")
-
         # 重新排序
         self.pushButton.clicked.connect(self.sort_picture_items)
 
@@ -137,7 +132,6 @@ class Modifier(Ui_mainWindow):
 
         # 设置qtreewidget的列宽和标题宽度一致
         self.video_tree_widget.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
-        self.picture_tree_widget.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
         self.treeWidget_5.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
 
     def update_background_color(self):
@@ -308,120 +302,62 @@ class Modifier(Ui_mainWindow):
                     file_item.setText(0, file)
 
     def add_file(self):
-        # 根据tab_widget当前选中的是picture_tab还是video_tab决定打开视频文件还是图片文件
-        if self.tabWidget.currentIndex() == 1:
-            file_names, _ = QtWidgets.QFileDialog.getOpenFileNames(window, "打开文件", "./", "图片文件(*.jpg *.png)")
 
-            # 打开图片文件后,如果选中图片, 打印图片信息,如果取消则打印取消
-            if not file_names:
-                return
+        file_names, _ = QtWidgets.QFileDialog.getOpenFileNames(window, "打开文件", "./", "视频文件(*.mp4 *.MP4)")
 
-            for pic_path in file_names:
-                # 文件名称
-                pic_name = pic_path.split('/')[-1]
-                # 计算图片文件的大小
-                pic_size = os.path.getsize(pic_path) / 1024
-                # 将pic_size这个字节转为kb,保留2位小数, 如果超过1024kb,则转化为MB
-                if pic_size > 1024:
-                    pic_size = pic_size / 1024
-                    pic_size = round(pic_size, 2)
-                    pic_size = str(pic_size) + "MB"
-                else:
-                    pic_size = round(pic_size, 2)
-                    pic_size = str(pic_size) + "KB"
-                # 将index_picture, pic_name, pic_size, pic_path添加到picture_tree_widget中
-                self.picture_tree_widget.addTopLevelItem(QtWidgets.QTreeWidgetItem([str(self.index_picture), pic_name, pic_size, pic_path]))
-                self.index_picture += 1
-            #self.picture_label.setPixmap(QtGui.QPixmap(file_name[0]))
+        # 如果没有打开视频文件
+        if not file_names:
+            return
 
-        else:
-            file_names, _ = QtWidgets.QFileDialog.getOpenFileNames(window, "打开文件", "./", "视频文件(*.mp4 *.MP4)")
+        for video_path in file_names:
 
-            # 如果没有打开视频文件
-            if not file_names:
-                return
+            # 文件名称
+            video_name = video_path.split('/')[-1]
+            # 计算video文件的大小
+            video_size = os.path.getsize(video_path) / 1024 / 1024
 
-            for video_path in file_names:
-
-                # 文件名称
-                video_name = video_path.split('/')[-1]
-                # 计算video文件的大小
-                video_size = os.path.getsize(video_path) / 1024 / 1024
-
-                if video_size > 1024:
-                    video_size = video_size / 1024
-                    video_size = round(video_size, 2)
-                    video_size = str(video_size) + "GB"
-                else:
-                    video_size = int(video_size)
-                    video_size = str(video_size) + "MB"
-                # 将index_picture, pic_name, pic_size, pic_path添加到video_tree_widget中
-                self.video_tree_widget.addTopLevelItem(
-                    QtWidgets.QTreeWidgetItem([str(self.index_video), video_name, video_size, video_path]))
-                self.index_video += 1
-                #self.video_label.setPixmap(QtGui.QPixmap(file_name[0]))
+            if video_size > 1024:
+                video_size = video_size / 1024
+                video_size = round(video_size, 2)
+                video_size = str(video_size) + "GB"
+            else:
+                video_size = int(video_size)
+                video_size = str(video_size) + "MB"
+            # 将index_picture, pic_name, pic_size, pic_path添加到video_tree_widget中
+            self.video_tree_widget.addTopLevelItem(
+                QtWidgets.QTreeWidgetItem([str(self.index_video), video_name, video_size, video_path]))
+            self.index_video += 1
+            #self.video_label.setPixmap(QtGui.QPixmap(file_name[0]))
 
     def delete_file(self):
-        if self.tabWidget.currentIndex() == 0:
-            selected_items = self.video_tree_widget.selectedItems()
+        selected_items = self.video_tree_widget.selectedItems()
 
-            if not selected_items:
-                #self.video_tree_widget.clear()
-                return
+        if not selected_items:
+            #self.video_tree_widget.clear()
+            return
 
-            for item in selected_items:
-                parent = item.parent()
-                if parent is None:
-                    # 顶级项目
-                    index = self.video_tree_widget.indexOfTopLevelItem(item)
-                    self.video_tree_widget.takeTopLevelItem(index)
-                else:
-                    # 子级项目
-                    parent.takeChild(parent.indexOfChild(item))
+        for item in selected_items:
+            parent = item.parent()
+            if parent is None:
+                # 顶级项目
+                index = self.video_tree_widget.indexOfTopLevelItem(item)
+                self.video_tree_widget.takeTopLevelItem(index)
+            else:
+                # 子级项目
+                parent.takeChild(parent.indexOfChild(item))
 
-            # 清空列表
-            self.treeWidget_5.clear()
-            self.label_3.setProperty("text", "列表中选中的文件名称")
-
-        else:
-            selected_items = self.picture_tree_widget.selectedItems()
-
-            if not selected_items:
-                #self.picture_tree_widget.clear()
-                return
-
-            for item in selected_items:
-                parent = item.parent()
-                if parent is None:
-                    # 顶级项目
-                    index = self.picture_tree_widget.indexOfTopLevelItem(item)
-                    self.picture_tree_widget.takeTopLevelItem(index)
-                else:
-                    # 子级项目
-                    parent.takeChild(parent.indexOfChild(item))
+        # 清空列表
+        self.treeWidget_5.clear()
+        self.label_3.setProperty("text", "列表中选中的文件名称")
 
     def clear_file(self):
-        if self.tabWidget.currentIndex() == 0:
-            self.video_tree_widget.clear()
-            self.index_video = 0
-        else:
-            self.picture_tree_widget.clear()
-            self.index_picture = 0
+        self.video_tree_widget.clear()
+        self.index_video = 0
+
         self.player.mediaPlayer.stop()
         self.treeWidget_5.clear()
         self.picture_label.clear()
         self.label_3.setProperty("text", "列表中选中的文件名称")
-
-    def picture_widget_item_selected(self):
-        selected_items = self.picture_tree_widget.selectedItems()
-        if not selected_items:
-            return
-        for item in selected_items:
-            pic_path = item.text(3)
-            self.selected_pic_item = item
-            self.selected_pic_path = pic_path
-            print(self.selected_pic_path)
-            self.picture_label.setPixmap(QtGui.QPixmap(pic_path))
 
     def video_widget_item_selected(self):
         selected_items = self.video_tree_widget.selectedItems()
@@ -455,7 +391,6 @@ class Modifier(Ui_mainWindow):
             curr_db.close()
 
             self.jie_gu_count = len(data)
-            self.label_24.setProperty("text", "已添加接箍数{}".format(self.jie_gu_count))
             self.label_3.setProperty("text", video_path.split('/')[-1])
 
             self.label_16.setProperty("text", "当前播放帧号 0 总帧数 {}".format(self.cur_total_frames))
@@ -480,7 +415,6 @@ class Modifier(Ui_mainWindow):
             data = self.current_item_data
 
             self.jie_gu_count = len(data)
-            self.label_24.setProperty("text", "已添加接箍数{}".format(self.jie_gu_count))
 
             # 当点击接箍item时，更新位置列表对应的图片
             position = int(idx_frame) / total_frame
@@ -643,16 +577,9 @@ class Modifier(Ui_mainWindow):
 
     def start_handle_video(self):
         # 根据tab_widget当前选中的是picture_tab还是video_tab决定打开视频文件还是图片文件
-        if self.tabWidget.currentIndex() == 0:
-            selected_items = self.video_tree_widget.selectedItems()
-            if len(selected_items) > 0:
-                self.handle_video()
-        else:
-            selected_items = self.picture_tree_widget.selectedItems()
-            if len(selected_items) > 0:
-                item = selected_items[0]
-                pic_path = item.text(3)
-                self.handle_picture(pic_path)
+        selected_items = self.video_tree_widget.selectedItems()
+        if len(selected_items) > 0:
+            self.handle_video()
 
     def pause_handle_video(self):
         if self.pushButton_9.text() == "暂停":
@@ -747,33 +674,20 @@ class Modifier(Ui_mainWindow):
         self.progressBar.setValue(int(process))
 
     def sort_picture_items(self):
-        if self.tabWidget.currentIndex() == 0:
-            # 获取所有item，按照video_name进行排序
-            items0 = [self.video_tree_widget.topLevelItem(i) for i in range(self.video_tree_widget.topLevelItemCount())]
-            for item in items0:
-                itx = item.text(1)
-                if not "_" in itx:
-                    show_warning_message_box("视频文件名称格式不正确，无法排序")
-                    return
-            sorted_items = sorted(items0,  key=lambda item: int(item.text(1).split("_")[1]))
+        # 获取所有item，按照video_name进行排序
+        items0 = [self.video_tree_widget.topLevelItem(i) for i in range(self.video_tree_widget.topLevelItemCount())]
+        for item in items0:
+            itx = item.text(1)
+            if not "_" in itx:
+                show_warning_message_box("视频文件名称格式不正确，无法排序")
+                return
+        sorted_items = sorted(items0,  key=lambda item: int(item.text(1).split("_")[1]))
 
-            # 更新picture_tree_widget中的item顺序
-            for i, item in enumerate(sorted_items):
-                self.video_tree_widget.takeTopLevelItem(self.video_tree_widget.indexOfTopLevelItem(item))
-                self.video_tree_widget.insertTopLevelItem(i, item)
-                item.setText(0, str(i))
-
-        else:
-            # 获取所有item，按照video_name进行排序
-            items = [self.picture_tree_widget.topLevelItem(i) for i in
-                     range(self.picture_tree_widget.topLevelItemCount())]
-            sorted_items = sorted(items, key=lambda x: x.text(1))
-
-            # 更新picture_tree_widget中的item顺序
-            for i, item in enumerate(sorted_items):
-                self.picture_tree_widget.takeTopLevelItem(self.picture_tree_widget.indexOfTopLevelItem(item))
-                self.picture_tree_widget.insertTopLevelItem(i, item)
-                item.setText(0, str(i))
+        # 更新item顺序
+        for i, item in enumerate(sorted_items):
+            self.video_tree_widget.takeTopLevelItem(self.video_tree_widget.indexOfTopLevelItem(item))
+            self.video_tree_widget.insertTopLevelItem(i, item)
+            item.setText(0, str(i))
 
     def delete_seleted_row(self):
         # 删除选中行
