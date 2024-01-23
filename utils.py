@@ -6,17 +6,19 @@
 import time
 import cv2
 import os
+import yaml
 import sqlite3
 from PyQt5.QtCore import pyqtSignal, QObject
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import QMessageBox
+import numpy as np
 
 class VideoHandler(QObject):
     progress_changed = pyqtSignal(float, object)
     pause_signal = pyqtSignal()
     resume_signal = pyqtSignal()
 
-    def __init__(self, input_video_path, output_video_path, list_depth, list_frame, start_frame=0, is_superX=False, model_name="ESPCN_x2"):
+    def __init__(self, input_video_path, output_video_path, list_depth, list_frame, start_frame=0, is_superX=False, model_name="cubic_x2"):
         super().__init__()
 
         self.input_video_path = input_video_path
@@ -38,12 +40,16 @@ class VideoHandler(QObject):
         else:
             self.scale = 1
 
-        # TODO: 修改背景和字体颜色
-        # self.background_color = background_color
-        # self.font_color = font_color
-
     # 视频添加水印
     def run(self):
+        # 加载默认配置
+        self.default_config = load_config()
+        self.x = int(self.default_config['x'])
+        self.y = int(self.default_config['y'])
+        self.font_size = self.default_config['font_size']
+        self.background_color = color_to_hex(self.default_config['background_color'])
+        self.font_color = color_to_hex(self.default_config['font_color'])
+
         # 读取视频
         cap = cv2.VideoCapture(self.input_video_path)
         zong_frames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
@@ -97,18 +103,19 @@ class VideoHandler(QObject):
 
                 # 添加一个透明的黄色背景在depth_text下面
                 depth_text_size = cv2.getTextSize(depth_text, cv2.FONT_HERSHEY_SIMPLEX, 1, 2)[0]
-                background_color = (79, 240, 255)  # 背景 255 250 227
-                text_color = (0, 0, 0)  # 文本
+
+                # background_color = self.background_color  # 背景 255 250 227
+                # text_color = self.font_color  # 文本
 
                 # 计算矩形的大小和位置
-                rect_top_left = (15, depth_text_size[1] - 10)
+                rect_top_left = (self.x, depth_text_size[1] - 10)
                 rect_bottom_right = (depth_text_size[0] + 30, depth_text_size[1] + 35)
 
                 # 绘制填充矩形
-                cv2.rectangle(frame, rect_top_left, rect_bottom_right, background_color, -1)
+                cv2.rectangle(frame, rect_top_left, rect_bottom_right, self.background_color, -1)
 
                 # 绘制文本
-                cv2.putText(frame, depth_text, (20, depth_text_size[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 1, text_color,
+                cv2.putText(frame, depth_text, (self.y, depth_text_size[1] + self.y), cv2.FONT_HERSHEY_SIMPLEX, 1, self.font_color,
                             2, cv2.LINE_AA)
 
                 # 写入输出视频
@@ -293,6 +300,17 @@ def super_resolution_with_modelname(image, mn="ESPCN_x2"):
 
         return upscaled
 
+# 改变图片图片亮度和对比度
+def adjust_brightness_contrast(image, brightness, contrast):
+    # 将输入范围从0-100映射到调整参数的范围
+    brightness = brightness / 50.0
+    contrast = contrast / 50.0
+    # 亮度调整
+    image = cv2.convertScaleAbs(image, alpha=brightness)
+    # 对比度调整
+    image = np.clip((contrast * image + brightness), 0, 255).astype(np.uint8)
+    return image
+
 def show_warning_message_box(text):
     # 创建消息框
     msgBox = QMessageBox()
@@ -317,6 +335,43 @@ def hex2rgb(hex):
 # rgb转为16进制
 def rgb2hex(rgb):
     return '#%02x%02x%02x' % rgb
+
+def color_to_hex(color_code):
+    # 将16进制字符串类型的颜色值转换为整数类型的RGB值
+    rgb = tuple(int(color_code[i:i + 2], 16) for i in (1, 3, 5))
+    # 将RGB格式的颜色值转换为BGR格式的颜色值
+    bgr = (rgb[2], rgb[1], rgb[0])
+    return bgr
+
+#读取配置文件
+def load_config(config_file="res/config.yaml"):
+    # 读取配置文件
+    with open(config_file, 'r') as file:
+        data = yaml.safe_load(file)
+    return data
+
+# 更新配置文件
+def update_config(x='20', y='20', font_size='13', background_color="#4ff0ff", font_color="#000000", config_file="res/config.yaml"):
+    config = {
+        'x': x,
+        'y': y,
+        'font_size': font_size,
+        'background_color': background_color,
+        'font_color': font_color
+    }
+    print(config)
+    with open(config_file, 'w') as file:
+        yaml.dump(config, file)
+
+def update_pic_preview_config(brightness=50, contrast=50, is_super_view=False, config_file="res/config_pic_prev.yaml"):
+    config = {
+        'brightness': brightness,
+        'contrast': contrast,
+        'is_super_view': is_super_view
+    }
+    print(config)
+    with open(config_file, 'w') as file:
+        yaml.dump(config, file)
 
 
 if __name__ == '__main__':

@@ -40,6 +40,9 @@ class Modifier(Ui_mainWindow):
         # 是否全部开始
         self.is_all_start = False
 
+        # 默认配置
+        self.default_settings = None
+        self.default_pic_settings = None
 
     # 在这个类中，修改mainwindow的属性或添加其他功能
     def modify_frame(self):
@@ -60,6 +63,9 @@ class Modifier(Ui_mainWindow):
 
         # 当选中 self.treeWidget_5的item时
         self.treeWidget_5.itemClicked.connect(self.jiegu_widget_item_selected)
+
+        # 当双击 self.treeWidget_5的item时
+        self.treeWidget_5.itemDoubleClicked.connect(self.jiegu_widget_item_double_click)
 
         # 设置picture_label和video_label显示图像为填充并拉伸
         self.picture_label.setScaledContents(True)
@@ -119,10 +125,19 @@ class Modifier(Ui_mainWindow):
         self.checkBox_3.clicked.connect(self.update_state_of_start)
 
         # 更新背景颜色
-        self.pushButton_4.clicked.connect(self.update_background_color)
+        self.pushButton_6.clicked.connect(self.update_background_color)
 
         # 更新字体颜色
-        self.pushButton_5.clicked.connect(self.update_font_color)
+        self.pushButton_23.clicked.connect(self.update_font_color)
+
+        # 设置-确定
+        self.pushButton_5.clicked.connect(self.update_settings)
+
+        # 设置-重置
+        self.pushButton_4.clicked.connect(self.reset_settings)
+
+        # 保存pic配置
+        self.pushButton_21.clicked.connect(self.update_pic_preview_settings)
 
         # 给 self.spinBox 的最大倍速为3,最小为1,默认为1
         self.spinBox.setValue(1)  # 设置默认值为1
@@ -134,13 +149,33 @@ class Modifier(Ui_mainWindow):
         self.video_tree_widget.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
         self.treeWidget_5.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
 
+        self.load_defaults_settings()
+
+
+    # 加载默认配置
+    def load_defaults_settings(self):
+        # 加载配置文件内容
+        self.default_settings = load_config()
+        self.lineEdit_8.setText(self.default_settings["x"])
+        self.lineEdit_9.setText(self.default_settings["y"])
+        self.lineEdit_6.setText(self.default_settings["font_size"])
+        self.label_35.setProperty("text", "{}".format(self.default_settings["background_color"]))
+        self.label_36.setProperty("text", "{}".format(self.default_settings["font_color"]))
+        # 加载图片预览配置
+        self.default_pic_settings = load_config("res/config_pic_prev.yaml")
+        print(self.default_pic_settings)
+        self.horizontalSlider.setValue(self.default_pic_settings["brightness"])
+        self.horizontalSlider_2.setValue(self.default_pic_settings["contrast"])
+        self.checkBox_2.setChecked(self.default_pic_settings["is_super_view"])
+
+
     def update_background_color(self):
         # 调起颜色选择对话框
         color = QtWidgets.QColorDialog.getColor()
         if color.isValid():
             # 将颜色转化为十六进制 #******
             color = color.name(QtGui.QColor.HexRgb)
-            self.label_6.setProperty("text", "{}".format(color))
+            self.label_35.setProperty("text", "{}".format(color))
         else:
             show_warning_message_box("颜色选择器不可用")
 
@@ -150,9 +185,38 @@ class Modifier(Ui_mainWindow):
         if color.isValid():
             # 将颜色转化为十六进制 #******
             color = color.name(QtGui.QColor.HexRgb)
-            self.label_8.setProperty("text", "{}".format(color))
+            self.label_36.setProperty("text", "{}".format(color))
         else:
             show_warning_message_box("颜色选择器不可用")
+
+    def update_settings(self):
+        x = self.lineEdit_8.text()
+        if x == "":
+            x = '20'
+
+        y = self.lineEdit_9.text()
+        if y == "":
+            y = '20'
+
+        font = self.lineEdit_6.text()
+        if font == "":
+            font = '13'
+
+        bgcolor = self.label_35.text()
+        fontcolor = self.label_36.text()
+
+        update_config(x, y, font, bgcolor, fontcolor)
+
+    def reset_settings(self):
+        update_config()
+        self.load_defaults_settings()
+
+    def update_pic_preview_settings(self):
+        config_path = "res/config_pic_prev.yaml"
+        brightness = self.horizontalSlider.value()
+        contrast = self.horizontalSlider_2.value()
+        is_superX = self.checkBox_2.isChecked()
+        update_pic_preview_config(brightness, contrast, is_superX, config_path)
 
     def update_state_of_start(self):
 
@@ -420,6 +484,17 @@ class Modifier(Ui_mainWindow):
             position = int(idx_frame) / total_frame
             self.display_frame(self.selected_video_path, position, self.picture_label)
 
+    def jiegu_widget_item_double_click(self):
+        selected_items = self.treeWidget_5.selectedItems()
+        if not selected_items:
+            return
+        for item in selected_items:
+            idx_frame = item.text(1)  # 帧号
+            frame_depth = item.text(3)  # 帧对应的深度
+            # 把帧号和深度赋值到接箍对深的文本框里面
+            self.frameLineEdit.setText(str(idx_frame))
+            self.deepLineEdit.setText(str(frame_depth))
+
     def playOrStop(self):
         if self.player.mediaPlayer.state() == QtMultimedia.QMediaPlayer.PlayingState:
             self.player.mediaPlayer.stop()
@@ -444,6 +519,10 @@ class Modifier(Ui_mainWindow):
                 return
             # 将帧图像转换为QPixmap并显示在QLabel上
             self.display_frame(self.selected_video_path, position, self.picture_label)
+            # 接箍对深 帧号填写
+            cur_duration, current_frame = self.player.get_current_frame()
+            self.frameLineEdit.setText(str(current_frame))
+            self.lineEdit_5.setText(cur_duration)
         else:
             self.pushButton_11.setText("暂停")
             self.player.mediaPlayer.play()
@@ -457,8 +536,11 @@ class Modifier(Ui_mainWindow):
         print("CheckBox is checked:", self.checkBox_2.isChecked())
         # 如果启用图像增强
         if self.checkBox_2.isChecked():
-            mn = self.comboBox.currentText()
+            mn = "cubic_x2"
             frame = super_resolution_with_modelname(frame, mn)
+
+        # 改变亮度和对比度
+        frame = adjust_brightness_contrast(frame, self.horizontalSlider.value(), self.horizontalSlider_2.value())
 
         if ret:
             # 将OpenCV图像格式转换为Qt图像格式
@@ -475,12 +557,22 @@ class Modifier(Ui_mainWindow):
         cap.release()
 
     def backSlider(self):
-        if self.player.mediaPlayer.state() == QtMultimedia.QMediaPlayer.PlayingState:
-            self.player.mediaPlayer.setPosition(self.player.mediaPlayer.position() - 10000) # 10秒
+        # if self.player.mediaPlayer.state() == QtMultimedia.QMediaPlayer.PlayingState:
+        j_miao = int(1000/25 * int(self.spinBox_2.text()))
+        self.player.mediaPlayer.setPosition(self.player.mediaPlayer.position() - j_miao)  # 1000/25秒，每次走一帧
+        # 接箍对深 帧号填写
+        cur_duration, current_frame = self.player.get_current_frame()
+        self.frameLineEdit.setText(str(current_frame))
+        self.lineEdit_5.setText(cur_duration)
 
     def forwardSlider(self):
-        if self.player.mediaPlayer.state() == QtMultimedia.QMediaPlayer.PlayingState:
-            self.player.mediaPlayer.setPosition(self.player.mediaPlayer.position() + 10000)
+        # if self.player.mediaPlayer.state() == QtMultimedia.QMediaPlayer.PlayingState:
+        j_miao = int(1000/25 * int(self.spinBox_2.text()))
+        self.player.mediaPlayer.setPosition(self.player.mediaPlayer.position() + j_miao)
+        # 接箍对深 帧号填写
+        cur_duration, current_frame = self.player.get_current_frame()
+        self.frameLineEdit.setText(str(current_frame))
+        self.lineEdit_5.setText(cur_duration)
 
     def reversePlayback(self):
         state = self.player.mediaPlayer.state()
@@ -510,7 +602,7 @@ class Modifier(Ui_mainWindow):
 
         is_spuerX = self.checkBox_2.isChecked()
         if is_spuerX:
-            mn = self.comboBox.currentText()
+            mn = "cubic_x2"
             frame = super_resolution_with_modelname(frame, mn)
         # 将帧保存为图片
         cv2.imwrite(fileName, frame)
@@ -594,8 +686,8 @@ class Modifier(Ui_mainWindow):
             print("start handle video... ")
 
     def handle_video(self):
-        is_superX = self.checkBox.isChecked()
-        model_name = self.comboBox.currentText()
+        is_superX = self.checkBox.isChecked()  # 是否开启图像增强
+        is_all_start = self.checkBox_3.isChecked()  # 是否对所有视频处理
         if self.pushButton_8.text() == "开始":
             self.pushButton_8.setText("停止")
             # 停止上一个线程
@@ -609,6 +701,19 @@ class Modifier(Ui_mainWindow):
 
             data = self.current_item_data
 
+            if len(data) < 2:
+                return
+            else:
+                # 计算平均深度
+                first_frame, first_depth = data[0]
+                last_frame, last_depth = data[-1]
+                # 计算插值
+                avg_deep = (last_depth - first_depth) / (last_frame - first_frame)
+                f0_deepth = first_depth - avg_deep * first_depth
+                f_end_deepth = last_depth + avg_deep * (self.cur_total_frames - last_frame)
+                data.insert(0, (1, f0_deepth))
+                data.append((self.cur_total_frames, f_end_deepth))
+
             list_depth = []
             list_frame = []
             for i in range(1, len(data)):
@@ -619,14 +724,9 @@ class Modifier(Ui_mainWindow):
                 list_depth.append((start_depth, end_depth))
                 list_frame.append((start_frame, end_frame))
 
-            if len(list_frame) == 0:
-                return
-
-
             self.video_handler = VideoHandler(self.selected_video_path,
                                               self.save_path + "/" + self.current_video + ".mp4",
-                                              list_depth, list_frame, 0, is_superX,
-                                              model_name=model_name, background_color=(), font_color=())
+                                              list_depth, list_frame, 0, is_superX)
             self.video_handler_thread = QtCore.QThread()
             self.video_handler.moveToThread(self.video_handler_thread)
             # 连接信号与槽
@@ -672,6 +772,9 @@ class Modifier(Ui_mainWindow):
     def update_progress_bar(self, process, frame):
         self.label_14.setProperty("text", self.selected_video_path.split('/')[-1] + "文件   处理进度: " + str(int(process)) + "%")
         self.progressBar.setValue(int(process))
+        if int(process) == 100:
+            self.pushButton_8.setText("开始")
+            self.pushButton_9.setText("暂停")
 
     def sort_picture_items(self):
         # 获取所有item，按照video_name进行排序

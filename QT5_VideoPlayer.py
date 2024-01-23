@@ -280,6 +280,20 @@ class VideoPlayer(QWidget):
             currentFrame = 0
         return currentFrame == self.totalFrames, currentFrame
 
+    def get_current_frame(self):
+        # 获取当前播放时间和总时长
+        position = self.mediaPlayer.position()
+        duration = self.mediaPlayer.duration()
+        mtime = QTime(0, 0, 0, 0)
+        mtime = mtime.addMSecs(position)
+        time_str = mtime.toString()
+        try:
+            # 当前视频帧,取整数
+            currentFrame = int(self.totalFrames * position / duration)
+        except:
+            currentFrame = 0
+        return time_str, currentFrame
+
 
 
 ##################### end ##################################

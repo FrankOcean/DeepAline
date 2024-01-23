@@ -779,13 +779,13 @@ border-radius:0px;</string>
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_3">
                  <property name="spacing">
-                  <number>5</number>
+                  <number>10</number>
                  </property>
                  <property name="leftMargin">
                   <number>15</number>
                  </property>
                  <property name="rightMargin">
-                  <number>0</number>
+                  <number>15</number>
                  </property>
                  <item>
                   <widget class="QLabel" name="label_13">
@@ -850,19 +850,6 @@ border-radius:0px;</string>
                   </widget>
                  </item>
                  <item>
-                  <spacer name="horizontalSpacer_7">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
                   <widget class="QCheckBox" name="checkBox_2">
                    <property name="minimumSize">
                     <size>
@@ -885,23 +872,37 @@ border-radius:0px;</string>
                   </widget>
                  </item>
                  <item>
-                  <spacer name="horizontalSpacer_8">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
+                  <widget class="QPushButton" name="pushButton_21">
+                   <property name="minimumSize">
                     <size>
-                     <width>40</width>
-                     <height>20</height>
+                     <width>80</width>
+                     <height>30</height>
                     </size>
                    </property>
-                  </spacer>
+                   <property name="maximumSize">
+                    <size>
+                     <width>100</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QPushButton {
+    border-radius: 3px;
+	background-color: white;
+	border: 1px solid orange;
+}
+</string>
+                   </property>
+                   <property name="text">
+                    <string>保存配置</string>
+                   </property>
+                  </widget>
                  </item>
                  <item>
                   <widget class="QPushButton" name="pushButton_15">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
+                     <width>80</width>
                      <height>0</height>
                     </size>
                    </property>
@@ -920,7 +921,7 @@ border-radius:0px;</string>
 </string>
                    </property>
                    <property name="text">
-                    <string>保存</string>
+                    <string>保存图片</string>
                    </property>
                   </widget>
                  </item>
@@ -1326,7 +1327,7 @@ border: 1px solid rgb(209,209,209);
            </property>
            <property name="maximumSize">
             <size>
-             <width>800</width>
+             <width>8000</width>
              <height>485</height>
             </size>
            </property>
@@ -1539,6 +1540,12 @@ QLabel {
                    <property name="styleSheet">
                     <string notr="true">color: white;</string>
                    </property>
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>3</number>
+                   </property>
                   </widget>
                  </item>
                  <item>
@@ -1565,6 +1572,12 @@ QLabel {
                    <property name="styleSheet">
                     <string notr="true">color: white;</string>
                    </property>
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>60</number>
+                   </property>
                   </widget>
                  </item>
                 </layout>
@@ -1588,7 +1601,7 @@ QLabel {
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
-                     <height>20</height>
+                     <height>30</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1610,7 +1623,7 @@ QLabel {
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
-                     <height>20</height>
+                     <height>30</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1631,7 +1644,7 @@ QLabel {
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
-                     <height>20</height>
+                     <height>30</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1652,7 +1665,7 @@ QLabel {
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
-                     <height>20</height>
+                     <height>30</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1673,7 +1686,7 @@ QLabel {
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
-                     <height>20</height>
+                     <height>30</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1738,7 +1751,7 @@ border: 0px solid rgb(209,209,209);
 border-radius:0px;</string>
               </property>
               <property name="currentIndex">
-               <number>1</number>
+               <number>0</number>
               </property>
               <widget class="QWidget" name="tab_1">
                <attribute name="title">
@@ -2113,7 +2126,7 @@ border-radius:0px;</string>
 </string>
                        </property>
                        <property name="text">
-                        <string>20</string>
+                        <string/>
                        </property>
                       </widget>
                      </item>
@@ -2153,7 +2166,7 @@ border-radius:0px;</string>
 </string>
                        </property>
                        <property name="text">
-                        <string>20</string>
+                        <string/>
                        </property>
                       </widget>
                      </item>
@@ -2187,7 +2200,7 @@ border-radius:0px;</string>
 </string>
                        </property>
                        <property name="text">
-                        <string>13</string>
+                        <string/>
                        </property>
                       </widget>
                      </item>
@@ -2255,7 +2268,7 @@ border-radius:0px;</string>
 </string>
                        </property>
                        <property name="text">
-                        <string>#4ff0ff</string>
+                        <string/>
                        </property>
                       </widget>
                      </item>
@@ -2297,7 +2310,7 @@ border-radius:0px;</string>
 </string>
                        </property>
                        <property name="text">
-                        <string>#000000</string>
+                        <string/>
                        </property>
                       </widget>
                      </item>
