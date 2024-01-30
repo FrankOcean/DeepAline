@@ -12,6 +12,9 @@ from PyQt5.QtCore import pyqtSignal, QObject
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import QMessageBox
 import numpy as np
+import easyocr
+import re
+from datetime import datetime, timedelta
 
 class VideoHandler(QObject):
     progress_changed = pyqtSignal(float, object)
@@ -108,8 +111,8 @@ class VideoHandler(QObject):
                 # text_color = self.font_color  # 文本
 
                 # 计算矩形的大小和位置
-                rect_top_left = (self.x, depth_text_size[1] - 10)
-                rect_bottom_right = (depth_text_size[0] + 30, depth_text_size[1] + 35)
+                rect_top_left = (self.x, self.y - 10)
+                rect_bottom_right = (self.x + depth_text_size[0], self.y + depth_text_size[1] + 10)
 
                 # 绘制填充矩形
                 cv2.rectangle(frame, rect_top_left, rect_bottom_right, self.background_color, -1)
@@ -163,23 +166,25 @@ class Database:
 
     def create_table(self):
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS data
-                              (current_frame INTEGER PRIMARY KEY, depth REAL)''')
+                              (current_frame INTEGER PRIMARY KEY, 
+                              depth REAL,
+                              time_info TEXT)''')
         self.conn.commit()
 
-    def add_data(self, current_frame, depth):
+    def add_data(self, current_frame, depth, current_time):
         existing_depth = self.get_data_by_frame(current_frame)
         if existing_depth is not None:
             self.update_data(current_frame, depth)
         else:
-            self.cursor.execute("INSERT OR REPLACE INTO data VALUES (?, ?)", (current_frame, depth))
+            self.cursor.execute("INSERT OR REPLACE INTO data VALUES (?, ?, ?)", (current_frame, depth, current_time))
             self.conn.commit()
 
     def delete_data(self, current_frame):
         self.cursor.execute("DELETE FROM data WHERE current_frame=?", (current_frame,))
         self.conn.commit()
 
-    def update_data(self, current_frame, new_depth):
-        self.cursor.execute("UPDATE data SET depth=? WHERE current_frame=?", (new_depth, current_frame))
+    def update_data(self, current_frame, new_depth, current_time):
+        self.cursor.execute("UPDATE data SET depth=? WHERE current_frame=?", (new_depth, current_frame, current_time))
         self.conn.commit()
 
     def get_data(self):
@@ -372,6 +377,72 @@ def update_pic_preview_config(brightness=50, contrast=50, is_super_view=False, c
     print(config)
     with open(config_file, 'w') as file:
         yaml.dump(config, file)
+
+# 写一个提示信息
+def show_info_message_box(title="删除", msg="确定删除?"):
+    # 创建消息框
+    msgBox = QMessageBox()
+    msgBox.setIcon(QMessageBox.Question)
+    msgBox.setWindowTitle(title)
+    msgBox.setText(msg)
+    msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+    msgBox.setDefaultButton(QMessageBox.No)
+    # 设置样式
+    msgBox.setStyleSheet("background-color: white; color: black;")
+    reply = msgBox.exec_()
+    return reply == QMessageBox.No
+
+# 识别图片文字
+def ocr_image(image_path_or_object):
+    # 判断 image_path_or_object 是否是已读取的图像对象
+    if isinstance(image_path_or_object, (str, bytes)):
+        # 如果是字符串或字节数组，则使用 cv2.imread 加载图像
+        image = cv2.imread(image_path_or_object)
+    else:
+        # 否则，将其视为已读取的图像对象
+        image = image_path_or_object
+
+    # 获取图像宽度和高度
+    # height, width = image.shape[:2]
+    #
+    # # 划分成四个区域（左上、左下、右下、右上）, 识别右上角
+    # right_top = image[0:height // 2, width // 2:width]
+    reader = easyocr.Reader(['ch_sim', 'en'])
+    result = reader.readtext(image)
+    # 提取识别结果
+    text_list = [res[1] for res in result]
+    return text_list
+
+# 判断时间格式是否符合标准，类似'01:49:3?'
+def extract_valid_time(time_str):
+    # 使用正则表达式提取时间字符串
+    match = re.search(r'\d{1,2}\s*:\s*\d{1,2}\s*:\s*\d{1,2}', time_str)
+    if match:
+        time_str = match.group()
+        # 将时间字符串转换为datetime对象，并检查是否符合标准时间格式
+        try:
+            datetime.strptime(time_str, '%H:%M:%S')
+        except ValueError:
+            # 不符合标准时间格式
+            return None
+        # 返回提取到的有效时间字符串
+        return time_str
+    else:
+        # 如果无法提取到有效的时间字符串，则剔除该数据
+        return None
+
+# 计算两个'%H:%M:%S'的时间差
+def calculate_time_difference(time1, time2):
+    format_str = "%H:%M:%S"
+    time_obj1 = datetime.strptime(time1, format_str)
+    time_obj2 = datetime.strptime(time2, format_str)
+
+    time_diff = abs(time_obj1 - time_obj2)
+    hours, remainder = divmod(time_diff.seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+
+    result = "{:02d}:{:02d}:{:02d}".format(hours, minutes, seconds)
+    return result
 
 
 if __name__ == '__main__':

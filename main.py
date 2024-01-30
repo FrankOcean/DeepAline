@@ -139,6 +139,10 @@ class Modifier(Ui_mainWindow):
         # 保存pic配置
         self.pushButton_21.clicked.connect(self.update_pic_preview_settings)
 
+        # 连接QSlider的valueChanged信号到槽函数onSliderValueChanged
+        self.horizontalSlider.sliderReleased.connect(self.onBrightnessSliderValueChanged)
+        self.horizontalSlider_2.sliderReleased.connect(self.onContrastSliderValueChanged)
+
         # 给 self.spinBox 的最大倍速为3,最小为1,默认为1
         self.spinBox.setValue(1)  # 设置默认值为1
         self.spinBox.setMinimum(1)  # 设置最小值为1
@@ -151,6 +155,17 @@ class Modifier(Ui_mainWindow):
 
         self.load_defaults_settings()
 
+    # 当亮度更新时
+    def onBrightnessSliderValueChanged(self):
+        if len(self.selected_video_path) != 0:
+            _, position = self.player.getCurrentProgress()
+            self.display_frame(self.selected_video_path, position, self.picture_label)
+
+    # 当对比度更新时
+    def onContrastSliderValueChanged(self):
+        if len(self.selected_video_path) != 0:
+            _, position = self.player.getCurrentProgress()
+            self.display_frame(self.selected_video_path, position, self.picture_label)
 
     # 加载默认配置
     def load_defaults_settings(self):
@@ -190,6 +205,9 @@ class Modifier(Ui_mainWindow):
             show_warning_message_box("颜色选择器不可用")
 
     def update_settings(self):
+        if show_info_message_box("设置", "确定更新设置？"):
+            return
+
         x = self.lineEdit_8.text()
         if x == "":
             x = '20'
@@ -208,10 +226,14 @@ class Modifier(Ui_mainWindow):
         update_config(x, y, font, bgcolor, fontcolor)
 
     def reset_settings(self):
+        if show_info_message_box("重置", "确定重置？"):
+            return
         update_config()
         self.load_defaults_settings()
 
     def update_pic_preview_settings(self):
+        if show_info_message_box("保存配置", "确定保存配置？"):
+            return
         config_path = "res/config_pic_prev.yaml"
         brightness = self.horizontalSlider.value()
         contrast = self.horizontalSlider_2.value()
@@ -240,8 +262,8 @@ class Modifier(Ui_mainWindow):
 
     def start_preview_scratch(self):
         sep_time = 3
-        if len(self.lineEdit_3.text()) > 0:
-            sep_time = int(self.lineEdit_3.text())
+        if len(self.spinBox_3.text()) > 0:
+            sep_time = int(self.spinBox_3.text())
         self.current_scatch = 0
 
         if self.timer1.isActive():
@@ -280,8 +302,8 @@ class Modifier(Ui_mainWindow):
 
     def preview_start_or_pause(self):
         sep_time = 3
-        if len(self.lineEdit_3.text()) > 0:
-            sep_time = int(self.lineEdit_3.text())
+        if len(self.spinBox_3.text()) > 0:
+            sep_time = int(self.spinBox_3.text())
 
         if self.timer1.isActive():
             self.timer1.stop()
@@ -394,6 +416,10 @@ class Modifier(Ui_mainWindow):
             #self.video_label.setPixmap(QtGui.QPixmap(file_name[0]))
 
     def delete_file(self):
+
+        if show_info_message_box():
+            return
+
         selected_items = self.video_tree_widget.selectedItems()
 
         if not selected_items:
@@ -415,6 +441,9 @@ class Modifier(Ui_mainWindow):
         self.label_3.setProperty("text", "列表中选中的文件名称")
 
     def clear_file(self):
+        if show_info_message_box("清空", "确认清空？"):
+            return
+
         self.video_tree_widget.clear()
         self.index_video = 0
 
@@ -522,7 +551,27 @@ class Modifier(Ui_mainWindow):
             # 接箍对深 帧号填写
             cur_duration, current_frame = self.player.get_current_frame()
             self.frameLineEdit.setText(str(current_frame))
-            self.lineEdit_5.setText(cur_duration)
+            #self.lineEdit_5.setText(cur_duration)
+            # 识别图像上的时间并填写到lineEdit_5上
+            start = time.time()
+            cap = cv2.VideoCapture(self.selected_video_path)
+            cap.set(cv2.CAP_PROP_POS_FRAMES, position)  # 设置当前帧位置
+            ret, frame = cap.read()  # 读取当前帧
+            if ret:
+                text_list = ocr_image(frame)
+                print(text_list)
+                print("识别时间:", time.time() - start)
+                if len(text_list) > 1:
+                    valid_time = text_list[1]
+                else:
+                    valid_time = "未识别"
+                self.lineEdit_5.setText(valid_time)
+
+            is_end, current_frame = self.player.getCurrentProgress()
+            if is_end:
+                self.timer.stop()
+            self.label_16.setProperty("text", "当前播放帧号 {} 总帧数 {}".format(current_frame, self.cur_total_frames))
+
         else:
             self.pushButton_11.setText("暂停")
             self.player.mediaPlayer.play()
@@ -561,18 +610,26 @@ class Modifier(Ui_mainWindow):
         j_miao = int(1000/25 * int(self.spinBox_2.text()))
         self.player.mediaPlayer.setPosition(self.player.mediaPlayer.position() - j_miao)  # 1000/25秒，每次走一帧
         # 接箍对深 帧号填写
+        _, position = self.player.getCurrentProgress()
+        # 将帧图像转换为QPixmap并显示在QLabel上
+        self.display_frame(self.selected_video_path, position, self.picture_label)
         cur_duration, current_frame = self.player.get_current_frame()
+        self.label_16.setProperty("text", "当前播放帧号 {} 总帧数 {}".format(current_frame, self.cur_total_frames))
         self.frameLineEdit.setText(str(current_frame))
-        self.lineEdit_5.setText(cur_duration)
+        #self.lineEdit_5.setText(cur_duration)
 
     def forwardSlider(self):
         # if self.player.mediaPlayer.state() == QtMultimedia.QMediaPlayer.PlayingState:
         j_miao = int(1000/25 * int(self.spinBox_2.text()))
         self.player.mediaPlayer.setPosition(self.player.mediaPlayer.position() + j_miao)
         # 接箍对深 帧号填写
+        _, position = self.player.getCurrentProgress()
+        # 将帧图像转换为QPixmap并显示在QLabel上
+        self.display_frame(self.selected_video_path, position, self.picture_label)
         cur_duration, current_frame = self.player.get_current_frame()
+        self.label_16.setProperty("text", "当前播放帧号 {} 总帧数 {}".format(current_frame, self.cur_total_frames))
         self.frameLineEdit.setText(str(current_frame))
-        self.lineEdit_5.setText(cur_duration)
+        #self.lineEdit_5.setText(cur_duration)
 
     def reversePlayback(self):
         state = self.player.mediaPlayer.state()
@@ -589,7 +646,7 @@ class Modifier(Ui_mainWindow):
         # 对self.player的当前帧进行截图并保存,保存的目录由用户决定
         # 弹出文件保存对话框，让用户选择保存目录和文件名
         options = QtWidgets.QFileDialog.Options()
-        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self.player, "Save Screenshot", "", "PNG Files (*.png);;JPEG Files (*.jpeg)",
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self.player, "保存", "", "PNG Files (*.png);;JPEG Files (*.jpeg)",
                                                   options=options)
         if not fileName:
             return
@@ -625,18 +682,26 @@ class Modifier(Ui_mainWindow):
         # 根据对应的视频, 对应的帧添加深度信息, 并保存为txt文件
         selected_items = self.video_tree_widget.selectedItems()
         if not selected_items:
+            show_warning_message_box("未选中视频")
             return
 
         flag_frame = self.frameLineEdit.text()
         flag_deepth = self.deepLineEdit.text()
+        flag_time = self.lineEdit_5.text()
 
-        if flag_frame == "" or flag_deepth == "":
+        if flag_frame == "" or flag_deepth == "" or flag_time == "":
+            show_warning_message_box("信息填写不完整")
+            return
+
+        # 检测时间格式是否正确
+        if not extract_valid_time(flag_time):
+            show_warning_message_box("时间格式不正确")
             return
 
         # 从deepth文件夹中对应的文本文件读取序号和深度信息, 如果读取不到设置序号为0
         db_path = "deepth/" + self.current_video + ".db"
         curr_db = Database(db_path)  # 指定数据库文件路径
-        curr_db.add_data(int(flag_frame), float(flag_deepth))
+        curr_db.add_data(int(flag_frame), float(flag_deepth), str(flag_time))
         data = curr_db.get_data()
         self.current_item_data = data
         self.show_depth_info(data)
@@ -648,16 +713,19 @@ class Modifier(Ui_mainWindow):
             self.treeWidget_5.takeTopLevelItem(0)
         if len(data) > 0:
             self.treeWidget_5.addTopLevelItem(
-                QtWidgets.QTreeWidgetItem(["1", str(data[0][0]), "0", str(data[0][1]), " "]))
+                QtWidgets.QTreeWidgetItem(["1", str(data[0][0]), "0", str(data[0][1]), data[0][2], "00:00:00", " "]))
 
         for i in range(1, len(data)):
             current_frame = data[i][0]
             prev_frame = data[i - 1][0]
+            current_time = data[i][2]
+            prev_time = data[i - 1][2]
             frame_diff = current_frame - prev_frame
+            time_diff = calculate_time_difference(current_time, prev_time)
             current_depth = data[i][1]
             # 将帧号和深度信息添加到接箍位置列表中
             self.treeWidget_5.addTopLevelItem(
-                QtWidgets.QTreeWidgetItem([str(i + 1), str(current_frame), str(frame_diff), str(current_depth), " "]))
+                QtWidgets.QTreeWidgetItem([str(i + 1), str(current_frame), str(frame_diff), str(current_depth), current_time, time_diff, " "]))
 
     def select_folder(self):
         # 选择一个文件夹作为视频保存路径
@@ -689,7 +757,6 @@ class Modifier(Ui_mainWindow):
         is_superX = self.checkBox.isChecked()  # 是否开启图像增强
         is_all_start = self.checkBox_3.isChecked()  # 是否对所有视频处理
         if self.pushButton_8.text() == "开始":
-            self.pushButton_8.setText("停止")
             # 停止上一个线程
             if self.video_handler is not None:
                 self.video_handler.stop()
@@ -702,8 +769,10 @@ class Modifier(Ui_mainWindow):
             data = self.current_item_data
 
             if len(data) < 2:
+                show_warning_message_box("请先添加深度信息!")
                 return
             else:
+                self.pushButton_8.setText("停止")
                 # 计算平均深度
                 first_frame, first_depth = data[0]
                 last_frame, last_depth = data[-1]
@@ -793,6 +862,8 @@ class Modifier(Ui_mainWindow):
             item.setText(0, str(i))
 
     def delete_seleted_row(self):
+        if show_info_message_box():
+            return
         # 删除选中行
         selected_items = self.treeWidget_5.selectedItems()
         selected_items1 = self.video_tree_widget.selectedItems()
@@ -875,7 +946,6 @@ class Modifier(Ui_mainWindow):
     def resetting_video_watermark(self):
         if os.path.exists(watermark_save_path):
             os.remove(watermark_save_path)
-
 
 
 if __name__ == '__main__':

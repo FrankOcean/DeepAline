@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
-        mainWindow.resize(1420, 914)
+        mainWindow.resize(1440, 960)
         mainWindow.setMinimumSize(QtCore.QSize(1420, 914))
         mainWindow.setStyleSheet("background-color: rgb(209, 209, 209);\n"
 "")
@@ -536,7 +536,7 @@ class Ui_mainWindow(object):
         self.verticalLayout_8.addLayout(self.horizontalLayout_5)
         self.verticalLayout_11.addWidget(self.splitter_3)
         self.frame_31 = QtWidgets.QFrame(self.splitter)
-        self.frame_31.setMinimumSize(QtCore.QSize(450, 0))
+        self.frame_31.setMinimumSize(QtCore.QSize(511, 0))
         self.frame_31.setStyleSheet("#frame_3.QFrame {\n"
 "    border-radius: 5px;\n"
 "    background-color: white;\n"
@@ -554,8 +554,7 @@ class Ui_mainWindow(object):
         self.splitter_4.setChildrenCollapsible(False)
         self.splitter_4.setObjectName("splitter_4")
         self.frame_10 = QtWidgets.QFrame(self.splitter_4)
-        self.frame_10.setMinimumSize(QtCore.QSize(511, 485))
-        self.frame_10.setMaximumSize(QtCore.QSize(8000, 485))
+        self.frame_10.setMinimumSize(QtCore.QSize(511, 500))
         self.frame_10.setStyleSheet("background-color: white;\n"
 "border: 1px solid gray; \n"
 "border-radius:0px;")
@@ -578,8 +577,7 @@ class Ui_mainWindow(object):
         self.label_9.setObjectName("label_9")
         self.verticalLayout_14.addWidget(self.label_9)
         self.player = VideoPlayer(self.frame_10)
-        self.player.setMinimumSize(QtCore.QSize(0, 376))
-        self.player.setMaximumSize(QtCore.QSize(16777215, 398))
+        self.player.setMinimumSize(QtCore.QSize(0, 418))
         self.player.setStyleSheet("QWidget {  \n"
 "    background-color: black;\n"
 "    border: 0px;  \n"
@@ -780,6 +778,14 @@ class Ui_mainWindow(object):
         self.horizontalLayout_9.addWidget(self.pushButton_17)
         spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_9.addItem(spacerItem4)
+        self.checkBox_4 = QtWidgets.QCheckBox(self.frame_8)
+        self.checkBox_4.setStyleSheet("border-radius: 0px;\n"
+"border: 0px;")
+        self.checkBox_4.setChecked(False)
+        self.checkBox_4.setObjectName("checkBox_4")
+        self.horizontalLayout_9.addWidget(self.checkBox_4)
+        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_9.addItem(spacerItem5)
         self.verticalLayout_12.addLayout(self.horizontalLayout_9)
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_8.setContentsMargins(6, -1, 10, -1)
@@ -928,8 +934,8 @@ class Ui_mainWindow(object):
         self.lineEdit_6.setText("")
         self.lineEdit_6.setObjectName("lineEdit_6")
         self.horizontalLayout_19.addWidget(self.lineEdit_6)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_19.addItem(spacerItem5)
+        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_19.addItem(spacerItem6)
         self.verticalLayout_17.addLayout(self.horizontalLayout_19)
         self.horizontalLayout_20 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_20.setContentsMargins(6, -1, 6, -1)
@@ -1114,12 +1120,9 @@ class Ui_mainWindow(object):
         self.horizontalLayout_12.addWidget(self.label_29)
         self.spinBox_3 = QtWidgets.QSpinBox(self.frame_11)
         self.spinBox_3.setButtonSymbols(QtWidgets.QAbstractSpinBox.PlusMinus)
+        self.spinBox_3.setMinimum(1)
         self.spinBox_3.setObjectName("spinBox_3")
         self.horizontalLayout_12.addWidget(self.spinBox_3)
-        self.lineEdit_3 = QtWidgets.QLineEdit(self.frame_11)
-        self.lineEdit_3.setMaximumSize(QtCore.QSize(60, 16777215))
-        self.lineEdit_3.setObjectName("lineEdit_3")
-        self.horizontalLayout_12.addWidget(self.lineEdit_3)
         self.verticalLayout_13.addLayout(self.horizontalLayout_12)
         self.label_6 = QtWidgets.QLabel(self.frame_11)
         self.label_6.setStyleSheet("border-radius: 0px;\n"
@@ -1143,8 +1146,8 @@ class Ui_mainWindow(object):
         self.horizontalLayout_10.setContentsMargins(10, 10, 10, 10)
         self.horizontalLayout_10.setSpacing(15)
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_10.addItem(spacerItem6)
+        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_10.addItem(spacerItem7)
         self.pushButton_20 = QtWidgets.QPushButton(self.frame_13)
         self.pushButton_20.setMinimumSize(QtCore.QSize(60, 30))
         self.pushButton_20.setStyleSheet("QPushButton {\n"
@@ -1165,8 +1168,8 @@ class Ui_mainWindow(object):
 "")
         self.pushButton_19.setObjectName("pushButton_19")
         self.horizontalLayout_10.addWidget(self.pushButton_19)
-        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_10.addItem(spacerItem7)
+        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_10.addItem(spacerItem8)
         self.verticalLayout_16.addLayout(self.horizontalLayout_10)
         self.verticalLayout_18.addWidget(self.splitter_4)
         self.horizontalLayout.addWidget(self.splitter)
@@ -1197,6 +1200,8 @@ class Ui_mainWindow(object):
         self.treeWidget_5.headerItem().setText(1, _translate("mainWindow", "帧号"))
         self.treeWidget_5.headerItem().setText(2, _translate("mainWindow", "帧间隔"))
         self.treeWidget_5.headerItem().setText(3, _translate("mainWindow", "深度"))
+        self.treeWidget_5.headerItem().setText(4, _translate("mainWindow", "时间"))
+        self.treeWidget_5.headerItem().setText(5, _translate("mainWindow", "时间差"))
         self.pushButton.setText(_translate("mainWindow", "重新排序"))
         self.pushButton_2.setText(_translate("mainWindow", "删除选中行"))
         self.pushButton_3.setText(_translate("mainWindow", "导出"))
@@ -1215,7 +1220,7 @@ class Ui_mainWindow(object):
         self.pushButton_8.setText(_translate("mainWindow", "开始"))
         self.pushButton_9.setText(_translate("mainWindow", "暂停"))
         self.label_9.setText(_translate("mainWindow", "视频预览"))
-        self.label_16.setText(_translate("mainWindow", "当前帧号: 0 总帧数: 0"))
+        self.label_16.setText(_translate("mainWindow", "当前播放帧号: 0 总帧数: 0"))
         self.label_15.setText(_translate("mainWindow", "倍速"))
         self.label_21.setText(_translate("mainWindow", "步进值"))
         self.pushButton_10.setText(_translate("mainWindow", "播放"))
@@ -1225,6 +1230,7 @@ class Ui_mainWindow(object):
         self.pushButton_14.setText(_translate("mainWindow", "倒放"))
         self.label_22.setText(_translate("mainWindow", "跳帧到:"))
         self.pushButton_17.setText(_translate("mainWindow", "查找"))
+        self.checkBox_4.setText(_translate("mainWindow", "是否识别时间"))
         self.label_18.setText(_translate("mainWindow", "帧号:"))
         self.label_4.setText(_translate("mainWindow", "时间:"))
         self.label_20.setText(_translate("mainWindow", "深度:"))

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1420</width>
-    <height>914</height>
+    <width>1440</width>
+    <height>960</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -531,6 +531,16 @@ QLabel {
                   </property>
                   <property name="textAlignment">
                    <set>AlignLeading|AlignVCenter</set>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>时间</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>时间差</string>
                   </property>
                  </column>
                 </widget>
@@ -1275,7 +1285,7 @@ border: 1px solid rgb(209,209,209);
       <widget class="QFrame" name="frame_3">
        <property name="minimumSize">
         <size>
-         <width>450</width>
+         <width>511</width>
          <height>0</height>
         </size>
        </property>
@@ -1322,13 +1332,7 @@ border: 1px solid rgb(209,209,209);
            <property name="minimumSize">
             <size>
              <width>511</width>
-             <height>485</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>8000</width>
-             <height>485</height>
+             <height>500</height>
             </size>
            </property>
            <property name="styleSheet">
@@ -1392,13 +1396,7 @@ border-radius:0px;</string>
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>376</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>398</height>
+                <height>418</height>
                </size>
               </property>
               <property name="styleSheet">
@@ -1493,7 +1491,7 @@ QLabel {
 </string>
                    </property>
                    <property name="text">
-                    <string>当前帧号: 0 总帧数: 0</string>
+                    <string>当前播放帧号: 0 总帧数: 0</string>
                    </property>
                   </widget>
                  </item>
@@ -1871,6 +1869,33 @@ border-radius:0px;</string>
                        </property>
                        <property name="text">
                         <string>查找</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <spacer name="horizontalSpacer_7">
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>40</width>
+                         <height>20</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                     <item>
+                      <widget class="QCheckBox" name="checkBox_4">
+                       <property name="styleSheet">
+                        <string notr="true">border-radius: 0px;
+border: 0px;</string>
+                       </property>
+                       <property name="text">
+                        <string>是否识别时间</string>
+                       </property>
+                       <property name="checked">
+                        <bool>false</bool>
                        </property>
                       </widget>
                      </item>
@@ -2602,15 +2627,8 @@ border-radius:0px;</string>
                    <property name="buttonSymbols">
                     <enum>QAbstractSpinBox::PlusMinus</enum>
                    </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="lineEdit_3">
-                   <property name="maximumSize">
-                    <size>
-                     <width>60</width>
-                     <height>16777215</height>
-                    </size>
+                   <property name="minimum">
+                    <number>1</number>
                    </property>
                   </widget>
                  </item>
