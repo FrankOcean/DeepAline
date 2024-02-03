@@ -336,6 +336,10 @@ class Modifier(Ui_mainWindow):
 
     def jump_to_frame(self):
         if len(self.selected_video_path) == 0:
+            show_warning_message_box("未选中视频")
+            return
+        if len(self.lineEdit.text()) == 0:
+            show_warning_message_box("未输入接箍对应帧号")
             return
         cur_frame = int(self.lineEdit.text())
         total_frame = self.cur_total_frames
