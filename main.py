@@ -4,8 +4,16 @@ from mainWindow import Ui_mainWindow
 from PyQt5 import QtWidgets, QtGui, QtCore, QtMultimedia
 from utils import *
 import pandas as pd
+from collections import deque
+from enum import Enum
+
+
+class VideoOperation(Enum):
+    Select = 1
+    Process = 2
 
 watermark_save_path = 'deepth/watermark.txt'
+
 
 class Modifier(Ui_mainWindow):
     def __init__(self):
@@ -43,6 +51,10 @@ class Modifier(Ui_mainWindow):
         # 默认配置
         self.default_settings = None
         self.default_pic_settings = None
+
+        # 全部开始，顺序执行队列
+        self.video_operations = deque()
+        self.current_operation = None
 
     # 在这个类中，修改mainwindow的属性或添加其他功能
     def modify_frame(self):
@@ -175,7 +187,11 @@ class Modifier(Ui_mainWindow):
         self.lineEdit_9.setText(self.default_settings["y"])
         self.lineEdit_6.setText(self.default_settings["font_size"])
         self.label_35.setProperty("text", "{}".format(self.default_settings["background_color"]))
+        # 将label_35的背景颜色设置为默认颜色
+        self.label_35.setStyleSheet("background-color: {};".format(self.default_settings["background_color"]))
         self.label_36.setProperty("text", "{}".format(self.default_settings["font_color"]))
+        # 将label_36的字体颜色设置为默认颜色
+        self.label_36.setStyleSheet("background-color: {};".format(self.default_settings["font_color"]))
         # 加载图片预览配置
         self.default_pic_settings = load_config("res/config_pic_prev.yaml")
         print(self.default_pic_settings)
@@ -191,8 +207,7 @@ class Modifier(Ui_mainWindow):
             # 将颜色转化为十六进制 #******
             color = color.name(QtGui.QColor.HexRgb)
             self.label_35.setProperty("text", "{}".format(color))
-        else:
-            show_warning_message_box("颜色选择器不可用")
+            self.label_35.setStyleSheet("background-color: {};".format(color))
 
     def update_font_color(self):
         # 调起颜色选择对话框
@@ -201,8 +216,7 @@ class Modifier(Ui_mainWindow):
             # 将颜色转化为十六进制 #******
             color = color.name(QtGui.QColor.HexRgb)
             self.label_36.setProperty("text", "{}".format(color))
-        else:
-            show_warning_message_box("颜色选择器不可用")
+            self.label_36.setStyleSheet("background-color: {};".format(color))
 
     def update_settings(self):
         if show_info_message_box("设置", "确定更新设置？"):
@@ -218,18 +232,27 @@ class Modifier(Ui_mainWindow):
 
         font = self.lineEdit_6.text()
         if font == "":
-            font = '13'
+            font = '1.3'
 
         bgcolor = self.label_35.text()
         fontcolor = self.label_36.text()
 
         update_config(x, y, font, bgcolor, fontcolor)
 
+        # 展示预览图
+        _, position = self.player.getCurrentProgress()
+        # 将帧图像转换为QPixmap并显示在QLabel上
+        self.display_frame(self.selected_video_path, position, self.picture_label)
+
     def reset_settings(self):
         if show_info_message_box("重置", "确定重置？"):
             return
         update_config()
         self.load_defaults_settings()
+        # 展示预览图
+        _, position = self.player.getCurrentProgress()
+        # 将帧图像转换为QPixmap并显示在QLabel上
+        self.display_frame(self.selected_video_path, position, self.picture_label)
 
     def update_pic_preview_settings(self):
         if show_info_message_box("保存配置", "确定保存配置？"):
@@ -253,7 +276,8 @@ class Modifier(Ui_mainWindow):
         for i in range(self.video_tree_widget.topLevelItemCount()):
             item = self.video_tree_widget.topLevelItem(i)
             video_path = item.text(1)
-            db_path = "deepth/" + video_path.split("/")[-1] + ".db"
+            db_path = "deepth/" + video_path.split("/")[-1].split(".")[0] + ".db"
+            print(db_path)
             if not os.path.exists(db_path):
                 self.is_all_start = False
                 self.checkBox_3.setChecked(False)
@@ -465,7 +489,7 @@ class Modifier(Ui_mainWindow):
             # 根据selected_video_path, 获取视频的总帧数
             total_frame = int(cv2.VideoCapture(video_path).get(cv2.CAP_PROP_FRAME_COUNT))
             self.cur_total_frames = total_frame
-            video_name = video_path.split('/')[-1].split('.')[0] + "_" + str(total_frame)
+            video_name = video_path.split('/')[-1].split('.')[0]
             self.current_video = video_name
 
             # 根据video_path将视频文件的第一帧展示在self.video_label上
@@ -529,11 +553,13 @@ class Modifier(Ui_mainWindow):
             self.player.mediaPlayer.stop()
             self.timer.stop()
             self.pushButton_10.setText('播放')
+            self.pushButton_11.setText('继续')
             self.player.mediaPlayer.setPlaybackRate(1)
             self.spinBox.setValue(1)
             self.label_16.setProperty("text", "当前播放帧号 0 总帧数 {}".format(self.cur_total_frames))
         else:
             self.pushButton_10.setText("停止")
+            self.pushButton_11.setText('暂停')
             self.player.mediaPlayer.play()
             self.timer.start(40)
 
@@ -541,6 +567,7 @@ class Modifier(Ui_mainWindow):
         if self.player.mediaPlayer.state() == QtMultimedia.QMediaPlayer.PlayingState:
             self.player.mediaPlayer.pause()
             self.timer.stop()
+            self.pushButton_10.setText('播放')
             self.pushButton_11.setText("继续")
             # 暂停后展示预览图
             is_end, position = self.player.getCurrentProgress()
@@ -557,7 +584,7 @@ class Modifier(Ui_mainWindow):
             cap = cv2.VideoCapture(self.selected_video_path)
             cap.set(cv2.CAP_PROP_POS_FRAMES, position)  # 设置当前帧位置
             ret, frame = cap.read()  # 读取当前帧
-            if ret:
+            if ret and self.checkBox_4.isChecked():
                 text_list = ocr_image(frame)
                 print(text_list)
                 print("识别时间:", time.time() - start)
@@ -573,6 +600,7 @@ class Modifier(Ui_mainWindow):
             self.label_16.setProperty("text", "当前播放帧号 {} 总帧数 {}".format(current_frame, self.cur_total_frames))
 
         else:
+            self.pushButton_10.setText('停止')
             self.pushButton_11.setText("暂停")
             self.player.mediaPlayer.play()
             self.timer.start(40)
@@ -590,6 +618,37 @@ class Modifier(Ui_mainWindow):
 
         # 改变亮度和对比度
         frame = adjust_brightness_contrast(frame, self.horizontalSlider.value(), self.horizontalSlider_2.value())
+
+        default_config = load_config()
+        x = int(default_config['x'])
+        y = int(default_config['y'])
+        font_size = float(default_config['font_size'])
+        background_color = color_to_hex(default_config['background_color'])
+        font_color = color_to_hex(default_config['font_color'])
+
+        data = self.current_item_data
+
+        if len(data) > 1:
+            # 计算平均深度
+            first_frame, first_depth, _ = data[0]
+            last_frame, last_depth, _ = data[-1]
+            # 计算插值
+            avg_deep = (last_depth - first_depth) / (last_frame - first_frame)
+            f0_deepth = first_depth - avg_deep * first_depth
+            # 计算current_depth
+            current_depth = position * avg_deep + f0_deepth
+            # 在视频帧上添加深度信息水印
+            depth_text = f"{current_depth:.3f} m"
+            # 添加一个透明的黄色背景在depth_text下面
+            depth_text_size = cv2.getTextSize(depth_text, cv2.FONT_HERSHEY_SIMPLEX, float(font_size), 2)[0]
+            # 计算矩形的大小和位置
+            rect_top_left = (x, y - 10)
+            rect_bottom_right = (x + depth_text_size[0], y + depth_text_size[1] + 10)
+            # 绘制填充矩形
+            cv2.rectangle(frame, rect_top_left, rect_bottom_right, background_color, -1)
+            # 绘制文本
+            cv2.putText(frame, depth_text, (x, depth_text_size[1] + y), cv2.FONT_HERSHEY_SIMPLEX, float(font_size), font_color, 2,
+                        cv2.LINE_AA)
 
         if ret:
             # 将OpenCV图像格式转换为Qt图像格式
@@ -632,6 +691,8 @@ class Modifier(Ui_mainWindow):
         #self.lineEdit_5.setText(cur_duration)
 
     def reversePlayback(self):
+        show_warning_message_box("开发中，暂不支持")
+        return
         state = self.player.mediaPlayer.state()
         if state == QtMultimedia.QMediaPlayer.StoppedState:
             self.player.setPosition(0)
@@ -661,6 +722,43 @@ class Modifier(Ui_mainWindow):
         if is_spuerX:
             mn = "cubic_x2"
             frame = super_resolution_with_modelname(frame, mn)
+
+        # 改变亮度和对比度
+        frame = adjust_brightness_contrast(frame, self.horizontalSlider.value(), self.horizontalSlider_2.value())
+
+        default_config = load_config()
+        x = int(default_config['x'])
+        y = int(default_config['y'])
+        font_size = float(default_config['font_size'])
+        background_color = color_to_hex(default_config['background_color'])
+        font_color = color_to_hex(default_config['font_color'])
+
+        data = self.current_item_data
+
+        # 计算平均深度
+        try:
+            first_frame, first_depth, _ = data[0]
+            last_frame, last_depth, _ = data[-1]
+        except:
+            first_frame, first_depth = data[0]
+            last_frame, last_depth = data[-1]
+        # 计算插值
+        avg_deep = (last_depth - first_depth) / (last_frame - first_frame)
+        f0_deepth = first_depth - avg_deep * first_depth
+        # 计算current_depth
+        current_depth = position * avg_deep + f0_deepth
+        # 在视频帧上添加深度信息水印
+        depth_text = f"{current_depth:.3f} m"
+        # 添加一个透明的黄色背景在depth_text下面
+        depth_text_size = cv2.getTextSize(depth_text, cv2.FONT_HERSHEY_SIMPLEX, font_size, 2)[0]
+        # 计算矩形的大小和位置
+        rect_top_left = (x, y - 10)
+        rect_bottom_right = (x + depth_text_size[0], y + depth_text_size[1] + 10)
+        # 绘制填充矩形
+        cv2.rectangle(frame, rect_top_left, rect_bottom_right, background_color, -1)
+        # 绘制文本
+        cv2.putText(frame, depth_text, (x, depth_text_size[1] + y), cv2.FONT_HERSHEY_SIMPLEX, font_size, font_color, 2, cv2.LINE_AA)
+
         # 将帧保存为图片
         cv2.imwrite(fileName, frame)
         cap.release()
@@ -676,7 +774,6 @@ class Modifier(Ui_mainWindow):
         if is_end:
             self.timer.stop()
         self.label_16.setProperty("text", "当前播放帧号 {} 总帧数 {}".format(current_frame, self.cur_total_frames))
-
 
     def add_depth_to_frame(self):
         # 根据对应的视频, 对应的帧添加深度信息, 并保存为txt文件
@@ -694,7 +791,7 @@ class Modifier(Ui_mainWindow):
             return
 
         # 检测时间格式是否正确
-        if not extract_valid_time(flag_time):
+        if not is_valid_time_format(flag_time):
             show_warning_message_box("时间格式不正确")
             return
 
@@ -736,9 +833,28 @@ class Modifier(Ui_mainWindow):
             self.lineEdit_4.setText(f"{self.save_path}")
 
     def start_handle_video(self):
-        # 根据tab_widget当前选中的是picture_tab还是video_tab决定打开视频文件还是图片文件
-        selected_items = self.video_tree_widget.selectedItems()
-        if len(selected_items) > 0:
+        if self.checkBox_3.isChecked():
+            print("开始处理所有视频")
+            # 清空之前的操作
+            self.video_operations.clear()
+            # 添加选择操作到队列
+            for item_index in range(self.video_tree_widget.topLevelItemCount()):
+                item = self.video_tree_widget.topLevelItem(item_index)
+                self.video_operations.append(item)
+            # 执行队列中的操作
+            self.process_next_video_operation()
+        else:
+            # 根据tab_widget当前选中的是picture_tab还是video_tab决定打开视频文件还是图片文件
+            selected_items = self.video_tree_widget.selectedItems()
+            if len(selected_items) > 0:
+                self.handle_video()
+
+    def process_next_video_operation(self):
+        print("process_next_video_operation...", self.video_operations)
+        if len(self.video_operations) > 0:
+            item = self.video_operations.popleft()
+            item.setSelected(True)
+            self.video_widget_item_selected()
             self.handle_video()
 
     def pause_handle_video(self):
@@ -755,7 +871,6 @@ class Modifier(Ui_mainWindow):
 
     def handle_video(self):
         is_superX = self.checkBox.isChecked()  # 是否开启图像增强
-        is_all_start = self.checkBox_3.isChecked()  # 是否对所有视频处理
         if self.pushButton_8.text() == "开始":
             # 停止上一个线程
             if self.video_handler is not None:
@@ -772,14 +887,22 @@ class Modifier(Ui_mainWindow):
                 show_warning_message_box("请先添加深度信息!")
                 return
             else:
-                self.pushButton_8.setText("停止")
+                if self.checkBox_3.isChecked():
+                    self.pushButton_8.setText("开始")
+                else:
+                    self.pushButton_8.setText("停止")
                 # 计算平均深度
-                first_frame, first_depth = data[0]
-                last_frame, last_depth = data[-1]
+                try:
+                    first_frame, first_depth, _ = data[0]
+                    last_frame, last_depth, _ = data[-1]
+                except:
+                    first_frame, first_depth = data[0]
+                    last_frame, last_depth = data[-1]
                 # 计算插值
                 avg_deep = (last_depth - first_depth) / (last_frame - first_frame)
                 f0_deepth = first_depth - avg_deep * first_depth
                 f_end_deepth = last_depth + avg_deep * (self.cur_total_frames - last_frame)
+                # TODO: 修改0的深度信息
                 data.insert(0, (1, f0_deepth))
                 data.append((self.cur_total_frames, f_end_deepth))
 
@@ -800,6 +923,7 @@ class Modifier(Ui_mainWindow):
             self.video_handler.moveToThread(self.video_handler_thread)
             # 连接信号与槽
             self.video_handler.progress_changed.connect(self.update_progress_bar)
+            self.video_handler.processing_finished.connect(self.process_next_video_operation)
             self.video_handler_thread.started.connect(self.video_handler.run)
             self.video_handler_thread.start()
         else:
@@ -841,7 +965,13 @@ class Modifier(Ui_mainWindow):
     def update_progress_bar(self, process, frame):
         self.label_14.setProperty("text", self.selected_video_path.split('/')[-1] + "文件   处理进度: " + str(int(process)) + "%")
         self.progressBar.setValue(int(process))
+        self.video_tree_widget.setEnabled(False)
+        self.pushButton_8.setEnabled(False)
+        self.pushButton_9.setEnabled(False)
         if int(process) == 100:
+            self.video_tree_widget.setEnabled(True)
+            self.pushButton_8.setEnabled(True)
+            self.pushButton_9.setEnabled(True)
             self.pushButton_8.setText("开始")
             self.pushButton_9.setText("暂停")
 
@@ -926,7 +1056,7 @@ class Modifier(Ui_mainWindow):
     def update_video_watermark(self):
         x = 0
         y = 0
-        fontsize = 13
+        fontsize = 1.3
         background_color = "#FFFFFF"
         font_color = "#000000"
 

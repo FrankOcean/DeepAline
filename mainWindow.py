@@ -66,6 +66,11 @@ class Ui_mainWindow(object):
         self.label = QtWidgets.QLabel(self.frame_4)
         self.label.setMinimumSize(QtCore.QSize(58, 25))
         self.label.setMaximumSize(QtCore.QSize(158, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label.setFont(font)
         self.label.setObjectName("label")
         self.verticalLayout_5.addWidget(self.label)
         self.widget = QtWidgets.QWidget(self.frame_4)
@@ -78,8 +83,13 @@ class Ui_mainWindow(object):
         self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.label_10 = QtWidgets.QLabel(self.widget)
-        self.label_10.setMinimumSize(QtCore.QSize(0, 20))
-        self.label_10.setMaximumSize(QtCore.QSize(100, 20))
+        self.label_10.setMinimumSize(QtCore.QSize(0, 30))
+        self.label_10.setMaximumSize(QtCore.QSize(100, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_10.setFont(font)
         self.label_10.setStyleSheet("QLabel {\n"
 "    background-color: white;\n"
 "    position: relative; /* 将 QFrame 设置为相对定位 */\n"
@@ -95,6 +105,8 @@ class Ui_mainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(8)
+        font.setBold(False)
+        font.setWeight(50)
         self.video_tree_widget.setFont(font)
         self.video_tree_widget.setAutoFillBackground(False)
         self.video_tree_widget.setStyleSheet("QTreeWidget {\n"
@@ -104,10 +116,24 @@ class Ui_mainWindow(object):
 "    border-radius:0px;\n"
 "    padding:0px 0px;\n"
 "}\n"
+"\n"
+"QTreeWidget::item {\n"
+"    border-bottom: 1px solid rgb(209,209,209);\n"
+"    height: 22px; /* 设置每个节点的高度 */\n"
+"    padding: 5px; /* 设置节点内边距 */\n"
+"    font-size: 12px; /* 设置字体大小 */\n"
+"    color: #333333; /* 设置字体颜色 */\n"
+"}\n"
+"\n"
+"QTreeWidget::item:selected {\n"
+"    color: #000000; /* 设置选中节点的字体颜色 */\n"
+"    background-color: #0078d7;\n"
+"}\n"
 "")
         self.video_tree_widget.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.video_tree_widget.setFrameShadow(QtWidgets.QFrame.Plain)
         self.video_tree_widget.setMidLineWidth(1)
+        self.video_tree_widget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.video_tree_widget.setObjectName("video_tree_widget")
         self.video_tree_widget.headerItem().setTextAlignment(0, QtCore.Qt.AlignLeading|QtCore.Qt.AlignVCenter)
         self.video_tree_widget.headerItem().setTextAlignment(1, QtCore.Qt.AlignLeading|QtCore.Qt.AlignVCenter)
@@ -168,7 +194,12 @@ class Ui_mainWindow(object):
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.label_2 = QtWidgets.QLabel(self.frame_5)
         self.label_2.setMinimumSize(QtCore.QSize(81, 25))
-        self.label_2.setMaximumSize(QtCore.QSize(181, 16))
+        self.label_2.setMaximumSize(QtCore.QSize(181, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.verticalLayout_4.addWidget(self.label_2)
         self.widget_2 = QtWidgets.QWidget(self.frame_5)
@@ -212,7 +243,22 @@ class Ui_mainWindow(object):
 "    border: 0px solid rgb(209,209,209); \n"
 "    border-radius:0px;\n"
 "    padding:0px 0px;\n"
+"}\n"
+"\n"
+"\n"
+"QTreeWidget::item {\n"
+"    border-bottom: 1px solid rgb(209,209,209);\n"
+"    height: 22px; /* 设置每个节点的高度 */\n"
+"    padding: 5px; /* 设置节点内边距 */\n"
+"    font-size: 12px; /* 设置字体大小 */\n"
+"    color: #333333; /* 设置字体颜色 */\n"
+"}\n"
+"\n"
+"QTreeWidget::item:selected {\n"
+"    color: #000000; /* 设置选中节点的字体颜色 */\n"
+"    background-color: #0078d7;\n"
 "}")
+        self.treeWidget_5.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.treeWidget_5.setObjectName("treeWidget_5")
         self.treeWidget_5.headerItem().setTextAlignment(0, QtCore.Qt.AlignLeading|QtCore.Qt.AlignVCenter)
         self.treeWidget_5.headerItem().setTextAlignment(1, QtCore.Qt.AlignLeading|QtCore.Qt.AlignVCenter)
@@ -307,7 +353,12 @@ class Ui_mainWindow(object):
         self.verticalLayout_10.setObjectName("verticalLayout_10")
         self.label_7 = QtWidgets.QLabel(self.frame_9)
         self.label_7.setMinimumSize(QtCore.QSize(58, 25))
-        self.label_7.setMaximumSize(QtCore.QSize(158, 25))
+        self.label_7.setMaximumSize(QtCore.QSize(16777215, 28))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_7.setFont(font)
         self.label_7.setStyleSheet("background-color: white;\n"
 "border: 0px; \n"
 "border-radius:0px;")
@@ -407,6 +458,11 @@ class Ui_mainWindow(object):
         self.label_11 = QtWidgets.QLabel(self.frame_41)
         self.label_11.setMinimumSize(QtCore.QSize(0, 30))
         self.label_11.setMaximumSize(QtCore.QSize(181, 30))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_11.setFont(font)
         self.label_11.setStyleSheet("QLabel {\n"
 "    background-color: white;\n"
 "    border: 0px;\n"
@@ -568,6 +624,11 @@ class Ui_mainWindow(object):
         self.label_9 = QtWidgets.QLabel(self.frame_10)
         self.label_9.setMinimumSize(QtCore.QSize(58, 25))
         self.label_9.setMaximumSize(QtCore.QSize(16777215, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_9.setFont(font)
         self.label_9.setStyleSheet("QLabel {\n"
 "    background-color: white;\n"
 "    border: 0px;\n"
@@ -721,6 +782,11 @@ class Ui_mainWindow(object):
         self.verticalLayout_20.setSpacing(0)
         self.verticalLayout_20.setObjectName("verticalLayout_20")
         self.tabWidget = QtWidgets.QTabWidget(self.frame_12)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.tabWidget.setFont(font)
         self.tabWidget.setStyleSheet("background-color: white;\n"
 "border: 0px solid rgb(209,209,209); \n"
 "border-radius:0px;")
@@ -1021,6 +1087,11 @@ class Ui_mainWindow(object):
         self.label_25 = QtWidgets.QLabel(self.frame_13)
         self.label_25.setMinimumSize(QtCore.QSize(58, 30))
         self.label_25.setMaximumSize(QtCore.QSize(158, 30))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_25.setFont(font)
         self.label_25.setStyleSheet("QLabel {\n"
 "    background-color: white;\n"
 "    border: 0px;\n"
@@ -1179,7 +1250,7 @@ class Ui_mainWindow(object):
         mainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(mainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
     def retranslateUi(self, mainWindow):
@@ -1205,7 +1276,7 @@ class Ui_mainWindow(object):
         self.pushButton.setText(_translate("mainWindow", "重新排序"))
         self.pushButton_2.setText(_translate("mainWindow", "删除选中行"))
         self.pushButton_3.setText(_translate("mainWindow", "导出"))
-        self.label_7.setText(_translate("mainWindow", "图片预览"))
+        self.label_7.setText(_translate("mainWindow", " 图片预览"))
         self.label_13.setText(_translate("mainWindow", "亮度"))
         self.label_19.setText(_translate("mainWindow", "对比度"))
         self.checkBox_2.setText(_translate("mainWindow", "启用图像增强"))
@@ -1219,7 +1290,7 @@ class Ui_mainWindow(object):
         self.label_14.setText(_translate("mainWindow", "文件 进度 0%"))
         self.pushButton_8.setText(_translate("mainWindow", "开始"))
         self.pushButton_9.setText(_translate("mainWindow", "暂停"))
-        self.label_9.setText(_translate("mainWindow", "视频预览"))
+        self.label_9.setText(_translate("mainWindow", " 视频预览"))
         self.label_16.setText(_translate("mainWindow", "当前播放帧号: 0 总帧数: 0"))
         self.label_15.setText(_translate("mainWindow", "倍速"))
         self.label_21.setText(_translate("mainWindow", "步进值"))

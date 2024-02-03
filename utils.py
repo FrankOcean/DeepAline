@@ -14,10 +14,11 @@ from PyQt5.QtWidgets import QMessageBox
 import numpy as np
 import easyocr
 import re
-from datetime import datetime, timedelta
+from datetime import datetime
 
 class VideoHandler(QObject):
     progress_changed = pyqtSignal(float, object)
+    processing_finished = pyqtSignal()
     pause_signal = pyqtSignal()
     resume_signal = pyqtSignal()
 
@@ -42,6 +43,7 @@ class VideoHandler(QObject):
             self.scale = model_scale
         else:
             self.scale = 1
+        self.is_running = False
 
     # 视频添加水印
     def run(self):
@@ -49,7 +51,7 @@ class VideoHandler(QObject):
         self.default_config = load_config()
         self.x = int(self.default_config['x'])
         self.y = int(self.default_config['y'])
-        self.font_size = self.default_config['font_size']
+        self.font_size = float(self.default_config['font_size'])
         self.background_color = color_to_hex(self.default_config['background_color'])
         self.font_color = color_to_hex(self.default_config['font_color'])
 
@@ -105,7 +107,7 @@ class VideoHandler(QObject):
                 depth_text = f"{current_depth:.3f} m"
 
                 # 添加一个透明的黄色背景在depth_text下面
-                depth_text_size = cv2.getTextSize(depth_text, cv2.FONT_HERSHEY_SIMPLEX, 1, 2)[0]
+                depth_text_size = cv2.getTextSize(depth_text, cv2.FONT_HERSHEY_SIMPLEX, self.font_size, 2)[0]
 
                 # background_color = self.background_color  # 背景 255 250 227
                 # text_color = self.font_color  # 文本
@@ -118,7 +120,7 @@ class VideoHandler(QObject):
                 cv2.rectangle(frame, rect_top_left, rect_bottom_right, self.background_color, -1)
 
                 # 绘制文本
-                cv2.putText(frame, depth_text, (self.y, depth_text_size[1] + self.y), cv2.FONT_HERSHEY_SIMPLEX, 1, self.font_color,
+                cv2.putText(frame, depth_text, (self.x, depth_text_size[1] + self.y), cv2.FONT_HERSHEY_SIMPLEX, self.font_size, self.font_color,
                             2, cv2.LINE_AA)
 
                 # 写入输出视频
@@ -138,6 +140,7 @@ class VideoHandler(QObject):
             if self.stop_flag or not self.is_paused:
                 self.progress_changed.emit(100.0, None)
 
+        self.processing_finished.emit()
         # 释放资源
         cap.release()
         out.release()
@@ -430,6 +433,10 @@ def extract_valid_time(time_str):
     else:
         # 如果无法提取到有效的时间字符串，则剔除该数据
         return None
+
+def is_valid_time_format(time_str):
+    pattern = r'^\d{1,2}:\d{1,2}:\d{1,2}$'
+    return bool(re.match(pattern, time_str))
 
 # 计算两个'%H:%M:%S'的时间差
 def calculate_time_difference(time1, time2):

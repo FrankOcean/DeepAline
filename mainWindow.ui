@@ -143,6 +143,13 @@
                 <height>25</height>
                </size>
               </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
               <property name="text">
                <string> 文件列表</string>
               </property>
@@ -176,14 +183,21 @@ border-radius:0px;</string>
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
-                   <height>20</height>
+                   <height>30</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
                    <width>100</width>
-                   <height>20</height>
+                   <height>30</height>
                   </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>9</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
                  </property>
                  <property name="styleSheet">
                   <string notr="true">QLabel {
@@ -211,6 +225,8 @@ border-radius:0px;</string>
                   <font>
                    <family>Times New Roman</family>
                    <pointsize>8</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
                   </font>
                  </property>
                  <property name="autoFillBackground">
@@ -224,6 +240,19 @@ border-radius:0px;</string>
 	border-radius:0px;
 	padding:0px 0px;
 }
+
+QTreeWidget::item {
+    border-bottom: 1px solid rgb(209,209,209);
+	height: 22px; /* 设置每个节点的高度 */
+    padding: 5px; /* 设置节点内边距 */
+	font-size: 12px; /* 设置字体大小 */
+    color: #333333; /* 设置字体颜色 */
+}
+
+QTreeWidget::item:selected {
+    color: #000000; /* 设置选中节点的字体颜色 */
+	background-color: #0078d7;
+}
 </string>
                  </property>
                  <property name="frameShape">
@@ -234,6 +263,9 @@ border-radius:0px;</string>
                  </property>
                  <property name="midLineWidth">
                   <number>1</number>
+                 </property>
+                 <property name="selectionBehavior">
+                  <enum>QAbstractItemView::SelectRows</enum>
                  </property>
                  <attribute name="headerCascadingSectionResizes">
                   <bool>false</bool>
@@ -406,8 +438,15 @@ border-radius:0px;</string>
               <property name="maximumSize">
                <size>
                 <width>181</width>
-                <height>16</height>
+                <height>25</height>
                </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
               </property>
               <property name="text">
                <string> 接箍位置列表</string>
@@ -493,7 +532,24 @@ QLabel {
     border: 0px solid rgb(209,209,209); 
 	border-radius:0px;
 	padding:0px 0px;
+}
+
+
+QTreeWidget::item {
+    border-bottom: 1px solid rgb(209,209,209);
+	height: 22px; /* 设置每个节点的高度 */
+    padding: 5px; /* 设置节点内边距 */
+	font-size: 12px; /* 设置字体大小 */
+    color: #333333; /* 设置字体颜色 */
+}
+
+QTreeWidget::item:selected {
+    color: #000000; /* 设置选中节点的字体颜色 */
+	background-color: #0078d7;
 }</string>
+                 </property>
+                 <property name="selectionBehavior">
+                  <enum>QAbstractItemView::SelectRows</enum>
                  </property>
                  <attribute name="headerCascadingSectionResizes">
                   <bool>false</bool>
@@ -754,9 +810,16 @@ QLabel {
                  </property>
                  <property name="maximumSize">
                   <size>
-                   <width>158</width>
-                   <height>25</height>
+                   <width>16777215</width>
+                   <height>28</height>
                   </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
                  </property>
                  <property name="styleSheet">
                   <string notr="true">background-color: white;
@@ -764,7 +827,7 @@ border: 0px;
 border-radius:0px;</string>
                  </property>
                  <property name="text">
-                  <string>图片预览</string>
+                  <string> 图片预览</string>
                  </property>
                 </widget>
                </item>
@@ -963,6 +1026,13 @@ border-radius:0px;
                 <width>181</width>
                 <height>30</height>
                </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
               </property>
               <property name="styleSheet">
                <string notr="true">QLabel {
@@ -1376,6 +1446,13 @@ border-radius:0px;</string>
                 <height>25</height>
                </size>
               </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
               <property name="styleSheet">
                <string notr="true">QLabel {
 	background-color: white;
@@ -1387,7 +1464,7 @@ border-radius:0px;</string>
                <enum>QFrame::NoFrame</enum>
               </property>
               <property name="text">
-               <string>视频预览</string>
+               <string> 视频预览</string>
               </property>
              </widget>
             </item>
@@ -1743,13 +1820,20 @@ border-radius:0px;</string>
             </property>
             <item>
              <widget class="QTabWidget" name="tabWidget">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
               <property name="styleSheet">
                <string notr="true">background-color: white;
 border: 0px solid rgb(209,209,209); 
 border-radius:0px;</string>
               </property>
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="tab_1">
                <attribute name="title">
@@ -2433,6 +2517,13 @@ border-radius:0px;</string>
                 <width>158</width>
                 <height>30</height>
                </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
               </property>
               <property name="styleSheet">
                <string notr="true">QLabel {
