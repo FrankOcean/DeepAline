@@ -187,7 +187,7 @@ class Database:
         self.conn.commit()
 
     def update_data(self, current_frame, new_depth, current_time):
-        self.cursor.execute("UPDATE data SET depth=? current_time=? WHERE current_frame=?", (new_depth, current_time, current_frame))
+        self.cursor.execute("UPDATE data SET depth=?, time_info=? WHERE current_frame=?", (new_depth, current_time, current_frame))
         self.conn.commit()
 
     def get_data(self):

@@ -528,6 +528,7 @@ class Modifier(Ui_mainWindow):
             idx_frame = item.text(1)  # 帧号
             sep_frame = item.text(2)  # 帧间隔
             frame_depth = item.text(3)  # 帧对应的深度
+            time_info = item.text(4)  # 对应时间
 
             info = "当前接箍号{} 深度 {}M".format(idx, frame_depth)
             self.label_28.setProperty("text", info)
@@ -535,6 +536,10 @@ class Modifier(Ui_mainWindow):
             total_frame = self.cur_total_frames
             info1 = "当前接箍编号 {} 接箍总数 {}".format(idx, len(self.current_item_data))
             self.label_31.setProperty("text", info1)
+
+            self.frameLineEdit.setText(str(idx_frame))
+            self.lineEdit_5.setText(str(time_info))
+            self.deepLineEdit.setText(str(frame_depth))
 
             data = self.current_item_data
 
