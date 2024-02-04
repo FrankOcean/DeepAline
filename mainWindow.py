@@ -1250,7 +1250,7 @@ class Ui_mainWindow(object):
         mainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(mainWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
     def retranslateUi(self, mainWindow):
@@ -1304,6 +1304,8 @@ class Ui_mainWindow(object):
         self.checkBox_4.setText(_translate("mainWindow", "是否识别时间"))
         self.label_18.setText(_translate("mainWindow", "帧号:"))
         self.label_4.setText(_translate("mainWindow", "时间:"))
+        self.lineEdit_5.setText(_translate("mainWindow", "00:00:00"))
+        self.lineEdit_5.setPlaceholderText(_translate("mainWindow", "00:00:00"))
         self.label_20.setText(_translate("mainWindow", "深度:"))
         self.pushButton_16.setText(_translate("mainWindow", "添加"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_1), _translate("mainWindow", "接箍对深"))

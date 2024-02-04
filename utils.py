@@ -177,7 +177,7 @@ class Database:
     def add_data(self, current_frame, depth, current_time):
         existing_depth = self.get_data_by_frame(current_frame)
         if existing_depth is not None:
-            self.update_data(current_frame, depth)
+            self.update_data(current_frame, depth, current_time)
         else:
             self.cursor.execute("INSERT OR REPLACE INTO data VALUES (?, ?, ?)", (current_frame, depth, current_time))
             self.conn.commit()
@@ -187,7 +187,7 @@ class Database:
         self.conn.commit()
 
     def update_data(self, current_frame, new_depth, current_time):
-        self.cursor.execute("UPDATE data SET depth=? WHERE current_frame=?", (new_depth, current_frame, current_time))
+        self.cursor.execute("UPDATE data SET depth=? current_time=? WHERE current_frame=?", (new_depth, current_time, current_frame))
         self.conn.commit()
 
     def get_data(self):
@@ -435,7 +435,7 @@ def extract_valid_time(time_str):
         return None
 
 def is_valid_time_format(time_str):
-    pattern = r'^\d{1,2}:\d{1,2}:\d{1,2}$'
+    pattern = r'^[0-2][0-9]:[0-5][0-9]:[0-5][0-9]$'
     return bool(re.match(pattern, time_str))
 
 # 计算两个'%H:%M:%S'的时间差

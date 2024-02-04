@@ -56,6 +56,9 @@ class Modifier(Ui_mainWindow):
         self.video_operations = deque()
         self.current_operation = None
 
+        # 记录上一个视频的最后深度
+        self.last_depth = 0
+
     # 在这个类中，修改mainwindow的属性或添加其他功能
     def modify_frame(self):
         # 设置默认显示第一个tab
@@ -634,8 +637,12 @@ class Modifier(Ui_mainWindow):
 
         if len(data) > 1:
             # 计算平均深度
-            first_frame, first_depth, _ = data[0]
-            last_frame, last_depth, _ = data[-1]
+            try:
+                first_frame, first_depth, _ = data[0]
+                last_frame, last_depth, _ = data[-1]
+            except:
+                first_frame, first_depth = data[0]
+                last_frame, last_depth = data[-1]
             # 计算插值
             avg_deep = (last_depth - first_depth) / (last_frame - first_frame)
             f0_deepth = first_depth - avg_deep * first_depth
@@ -837,6 +844,9 @@ class Modifier(Ui_mainWindow):
             self.lineEdit_4.setText(f"{self.save_path}")
 
     def start_handle_video(self):
+        if self.lineEdit_4.text() == "":
+            show_warning_message_box("请先选择保存路径")
+            return
         if self.checkBox_3.isChecked():
             print("开始处理所有视频")
             # 清空之前的操作
@@ -860,6 +870,8 @@ class Modifier(Ui_mainWindow):
             item.setSelected(True)
             self.video_widget_item_selected()
             self.handle_video()
+        else:
+            self.last_depth = 0
 
     def pause_handle_video(self):
         if self.pushButton_9.text() == "暂停":
@@ -904,11 +916,12 @@ class Modifier(Ui_mainWindow):
                     last_frame, last_depth = data[-1]
                 # 计算插值
                 avg_deep = (last_depth - first_depth) / (last_frame - first_frame)
-                f0_deepth = first_depth - avg_deep * first_depth
+                # f0_deepth = first_depth - avg_deep * first_depth
                 f_end_deepth = last_depth + avg_deep * (self.cur_total_frames - last_frame)
                 # TODO: 修改0的深度信息
-                data.insert(0, (1, f0_deepth))
+                data.insert(0, (1, self.last_depth))
                 data.append((self.cur_total_frames, f_end_deepth))
+                self.last_depth = f_end_deepth
 
             list_depth = []
             list_frame = []
