@@ -14,8 +14,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
-        mainWindow.resize(1440, 960)
-        mainWindow.setMinimumSize(QtCore.QSize(1420, 914))
+        mainWindow.resize(1640, 960)
+        mainWindow.setMinimumSize(QtCore.QSize(1440, 914))
         mainWindow.setStyleSheet("background-color: rgb(209, 209, 209);\n"
 "")
         self.centralwidget = QtWidgets.QWidget(mainWindow)
@@ -212,8 +212,8 @@ class Ui_mainWindow(object):
         self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.label_3 = QtWidgets.QLabel(self.widget_2)
-        self.label_3.setMinimumSize(QtCore.QSize(141, 20))
-        self.label_3.setMaximumSize(QtCore.QSize(290, 20))
+        self.label_3.setMinimumSize(QtCore.QSize(141, 30))
+        self.label_3.setMaximumSize(QtCore.QSize(290, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(10)
@@ -272,16 +272,6 @@ class Ui_mainWindow(object):
         self.horizontalLayout_13.setContentsMargins(3, 3, 3, 3)
         self.horizontalLayout_13.setSpacing(3)
         self.horizontalLayout_13.setObjectName("horizontalLayout_13")
-        self.pushButton = QtWidgets.QPushButton(self.frame_5)
-        self.pushButton.setMinimumSize(QtCore.QSize(0, 22))
-        self.pushButton.setStyleSheet("QPushButton {\n"
-"    border-radius: 3px;\n"
-"    background-color: white;\n"
-"    border: 1px solid orange;\n"
-"}\n"
-"")
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout_13.addWidget(self.pushButton)
         self.pushButton_2 = QtWidgets.QPushButton(self.frame_5)
         self.pushButton_2.setMinimumSize(QtCore.QSize(0, 22))
         self.pushButton_2.setStyleSheet("QPushButton {\n"
@@ -305,7 +295,7 @@ class Ui_mainWindow(object):
         self.verticalLayout_4.addLayout(self.horizontalLayout_13)
         self.verticalLayout_2.addWidget(self.splitter_2)
         self.frame_2 = QtWidgets.QFrame(self.splitter)
-        self.frame_2.setMinimumSize(QtCore.QSize(640, 0))
+        self.frame_2.setMinimumSize(QtCore.QSize(800, 0))
         self.frame_2.setStyleSheet("#frame_2.QFrame {\n"
 "    border-radius: 5px;\n"
 "    background-color: white;\n"
@@ -365,7 +355,7 @@ class Ui_mainWindow(object):
         self.label_7.setObjectName("label_7")
         self.verticalLayout_10.addWidget(self.label_7)
         self.picture_label = QtWidgets.QLabel(self.frame_9)
-        self.picture_label.setMinimumSize(QtCore.QSize(640, 480))
+        self.picture_label.setMinimumSize(QtCore.QSize(640, 600))
         self.picture_label.setStyleSheet("QLabel {  \n"
 "    background-color: black;  \n"
 "}")
@@ -448,12 +438,15 @@ class Ui_mainWindow(object):
         self.verticalLayout_10.addLayout(self.horizontalLayout_3)
         self.verticalLayout_7.addWidget(self.frame_9)
         self.frame_41 = QtWidgets.QFrame(self.splitter_3)
+        self.frame_41.setMaximumSize(QtCore.QSize(16777215, 229))
         self.frame_41.setStyleSheet("background-color: white;\n"
 "border: 1px solid gray; \n"
 "border-radius:0px;\n"
 "")
         self.frame_41.setObjectName("frame_41")
         self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.frame_41)
+        self.verticalLayout_8.setContentsMargins(9, 0, 9, 0)
+        self.verticalLayout_8.setSpacing(0)
         self.verticalLayout_8.setObjectName("verticalLayout_8")
         self.label_11 = QtWidgets.QLabel(self.frame_41)
         self.label_11.setMinimumSize(QtCore.QSize(0, 30))
@@ -480,6 +473,7 @@ class Ui_mainWindow(object):
         self.frame_6.setMidLineWidth(1)
         self.frame_6.setObjectName("frame_6")
         self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.frame_6)
+        self.verticalLayout_9.setContentsMargins(0, -1, -1, -1)
         self.verticalLayout_9.setSpacing(9)
         self.verticalLayout_9.setObjectName("verticalLayout_9")
         self.horizontalLayout_14 = QtWidgets.QHBoxLayout()
@@ -539,9 +533,9 @@ class Ui_mainWindow(object):
         self.label_14.setMaximumSize(QtCore.QSize(16777215, 16))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
+        font.setPointSize(8)
+        font.setBold(False)
+        font.setWeight(50)
         self.label_14.setFont(font)
         self.label_14.setStyleSheet("border-radius: 0px;\n"
 "border: 0px;\n"
@@ -593,6 +587,7 @@ class Ui_mainWindow(object):
         self.verticalLayout_11.addWidget(self.splitter_3)
         self.frame_31 = QtWidgets.QFrame(self.splitter)
         self.frame_31.setMinimumSize(QtCore.QSize(511, 0))
+        self.frame_31.setMaximumSize(QtCore.QSize(511, 16777215))
         self.frame_31.setStyleSheet("#frame_3.QFrame {\n"
 "    border-radius: 5px;\n"
 "    background-color: white;\n"
@@ -680,33 +675,45 @@ class Ui_mainWindow(object):
 "")
         self.label_16.setObjectName("label_16")
         self.horizontalLayout_7.addWidget(self.label_16)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem3)
         self.label_15 = QtWidgets.QLabel(self.frame_7)
-        self.label_15.setMaximumSize(QtCore.QSize(35, 16777215))
+        self.label_15.setMaximumSize(QtCore.QSize(40, 16777215))
         self.label_15.setStyleSheet("QLabel {\n"
 "    border: 0px;\n"
 "    color: white;\n"
 "}")
+        self.label_15.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_15.setObjectName("label_15")
         self.horizontalLayout_7.addWidget(self.label_15)
         self.spinBox = QtWidgets.QSpinBox(self.frame_7)
-        self.spinBox.setMaximumSize(QtCore.QSize(45, 16777215))
-        self.spinBox.setStyleSheet("color: white;")
+        self.spinBox.setMaximumSize(QtCore.QSize(35, 16777215))
+        self.spinBox.setStyleSheet("QSpinBox {\n"
+"    background-color: white;\n"
+"    border: 1px solid white;\n"
+"    color: black;\n"
+"}\n"
+"")
         self.spinBox.setMinimum(1)
         self.spinBox.setMaximum(3)
         self.spinBox.setObjectName("spinBox")
         self.horizontalLayout_7.addWidget(self.spinBox)
         self.label_21 = QtWidgets.QLabel(self.frame_7)
-        self.label_21.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.label_21.setMaximumSize(QtCore.QSize(60, 16777215))
         self.label_21.setStyleSheet("QLabel {\n"
 "    border: 0px;\n"
 "    color: white;\n"
 "}")
+        self.label_21.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_21.setObjectName("label_21")
         self.horizontalLayout_7.addWidget(self.label_21)
         self.spinBox_2 = QtWidgets.QSpinBox(self.frame_7)
-        self.spinBox_2.setStyleSheet("color: white;")
+        self.spinBox_2.setMinimumSize(QtCore.QSize(35, 0))
+        self.spinBox_2.setMaximumSize(QtCore.QSize(35, 16777215))
+        self.spinBox_2.setStyleSheet("QSpinBox {\n"
+"    background-color: white;\n"
+"    border: 1px solid white;\n"
+"    color: black;\n"
+"}\n"
+"")
         self.spinBox_2.setMinimum(1)
         self.spinBox_2.setMaximum(60)
         self.spinBox_2.setObjectName("spinBox_2")
@@ -757,16 +764,6 @@ class Ui_mainWindow(object):
 "}")
         self.pushButton_13.setObjectName("pushButton_13")
         self.horizontalLayout_6.addWidget(self.pushButton_13)
-        self.pushButton_14 = QtWidgets.QPushButton(self.frame_7)
-        self.pushButton_14.setMinimumSize(QtCore.QSize(0, 30))
-        self.pushButton_14.setStyleSheet("QPushButton {\n"
-"    border-radius: 3px;\n"
-"    background-color: rgb(32,32,32);\n"
-"    border: 1px solid black;\n"
-"    color: cyan; \n"
-"}")
-        self.pushButton_14.setObjectName("pushButton_14")
-        self.horizontalLayout_6.addWidget(self.pushButton_14)
         self.verticalLayout_6.addLayout(self.horizontalLayout_6)
         self.verticalLayout_14.addWidget(self.frame_7)
         self.frame_12 = QtWidgets.QFrame(self.splitter_4)
@@ -813,6 +810,7 @@ class Ui_mainWindow(object):
         self.horizontalLayout_9.setSpacing(5)
         self.horizontalLayout_9.setObjectName("horizontalLayout_9")
         self.label_22 = QtWidgets.QLabel(self.frame_8)
+        self.label_22.setMinimumSize(QtCore.QSize(50, 0))
         self.label_22.setMaximumSize(QtCore.QSize(60, 20))
         self.label_22.setStyleSheet("QLabel {\n"
 "    background-color: white;\n"
@@ -842,23 +840,17 @@ class Ui_mainWindow(object):
 "")
         self.pushButton_17.setObjectName("pushButton_17")
         self.horizontalLayout_9.addWidget(self.pushButton_17)
+        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_9.addItem(spacerItem3)
         spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_9.addItem(spacerItem4)
-        self.checkBox_4 = QtWidgets.QCheckBox(self.frame_8)
-        self.checkBox_4.setStyleSheet("border-radius: 0px;\n"
-"border: 0px;")
-        self.checkBox_4.setChecked(False)
-        self.checkBox_4.setObjectName("checkBox_4")
-        self.horizontalLayout_9.addWidget(self.checkBox_4)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_9.addItem(spacerItem5)
         self.verticalLayout_12.addLayout(self.horizontalLayout_9)
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_8.setContentsMargins(6, -1, 10, -1)
         self.horizontalLayout_8.setSpacing(5)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
         self.label_18 = QtWidgets.QLabel(self.frame_8)
-        self.label_18.setMaximumSize(QtCore.QSize(16777215, 20))
+        self.label_18.setMaximumSize(QtCore.QSize(500, 20))
         self.label_18.setStyleSheet("QLabel {\n"
 "    background-color: white;\n"
 "    border: 0px;\n"
@@ -1000,8 +992,8 @@ class Ui_mainWindow(object):
         self.lineEdit_6.setText("")
         self.lineEdit_6.setObjectName("lineEdit_6")
         self.horizontalLayout_19.addWidget(self.lineEdit_6)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_19.addItem(spacerItem6)
+        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_19.addItem(spacerItem5)
         self.verticalLayout_17.addLayout(self.horizontalLayout_19)
         self.horizontalLayout_20 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_20.setContentsMargins(6, -1, 6, -1)
@@ -1074,6 +1066,8 @@ class Ui_mainWindow(object):
         self.tabWidget.addTab(self.tab_2, "")
         self.verticalLayout_20.addWidget(self.tabWidget)
         self.frame_13 = QtWidgets.QFrame(self.splitter_4)
+        self.frame_13.setMinimumSize(QtCore.QSize(0, 229))
+        self.frame_13.setMaximumSize(QtCore.QSize(16777215, 229))
         self.frame_13.setStyleSheet("background-color: white;\n"
 "border: 1px solid gray; \n"
 "border-radius:0px;")
@@ -1082,7 +1076,7 @@ class Ui_mainWindow(object):
         self.frame_13.setObjectName("frame_13")
         self.verticalLayout_16 = QtWidgets.QVBoxLayout(self.frame_13)
         self.verticalLayout_16.setContentsMargins(9, 0, 9, 0)
-        self.verticalLayout_16.setSpacing(6)
+        self.verticalLayout_16.setSpacing(0)
         self.verticalLayout_16.setObjectName("verticalLayout_16")
         self.label_25 = QtWidgets.QLabel(self.frame_13)
         self.label_25.setMinimumSize(QtCore.QSize(58, 30))
@@ -1099,6 +1093,7 @@ class Ui_mainWindow(object):
         self.label_25.setObjectName("label_25")
         self.verticalLayout_16.addWidget(self.label_25)
         self.frame_11 = QtWidgets.QFrame(self.frame_13)
+        self.frame_11.setMinimumSize(QtCore.QSize(0, 127))
         self.frame_11.setStyleSheet("QFrame {\n"
 "    background-color: white;\n"
 "    position: relative; /* 将 QFrame 设置为相对定位 */\n"
@@ -1144,23 +1139,26 @@ class Ui_mainWindow(object):
 "    border: 0px;\n"
 "    color: rgb(255, 38, 0);\n"
 "}")
+        self.label_31.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_31.setObjectName("label_31")
         self.horizontalLayout_11.addWidget(self.label_31)
         self.verticalLayout_13.addLayout(self.horizontalLayout_11)
         self.horizontalLayout_12 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_12.setSpacing(5)
+        self.horizontalLayout_12.setSpacing(0)
         self.horizontalLayout_12.setObjectName("horizontalLayout_12")
         self.label_26 = QtWidgets.QLabel(self.frame_11)
-        self.label_26.setMaximumSize(QtCore.QSize(105, 16777215))
+        self.label_26.setMaximumSize(QtCore.QSize(75, 16777215))
+        self.label_26.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.label_26.setStyleSheet("QLabel {\n"
 "    background-color: white;\n"
 "    border: 0px;\n"
 "}")
+        self.label_26.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.label_26.setObjectName("label_26")
         self.horizontalLayout_12.addWidget(self.label_26)
         self.lineEdit_2 = QtWidgets.QLineEdit(self.frame_11)
         self.lineEdit_2.setMinimumSize(QtCore.QSize(0, 30))
-        self.lineEdit_2.setMaximumSize(QtCore.QSize(60, 16777215))
+        self.lineEdit_2.setMaximumSize(QtCore.QSize(90, 16777215))
         self.lineEdit_2.setStyleSheet("QLineEdit {\n"
 "    border-radius: 3px;\n"
 "    background-color: white;\n"
@@ -1170,8 +1168,8 @@ class Ui_mainWindow(object):
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.horizontalLayout_12.addWidget(self.lineEdit_2)
         self.pushButton_18 = QtWidgets.QPushButton(self.frame_11)
-        self.pushButton_18.setMinimumSize(QtCore.QSize(25, 25))
-        self.pushButton_18.setMaximumSize(QtCore.QSize(40, 16777215))
+        self.pushButton_18.setMinimumSize(QtCore.QSize(60, 25))
+        self.pushButton_18.setMaximumSize(QtCore.QSize(60, 16777215))
         self.pushButton_18.setStyleSheet("QPushButton {\n"
 "    border-radius: 3px;\n"
 "    background-color: white;\n"
@@ -1187,9 +1185,11 @@ class Ui_mainWindow(object):
 "    border: 0px;\n"
 "    \n"
 "}")
+        self.label_29.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_29.setObjectName("label_29")
         self.horizontalLayout_12.addWidget(self.label_29)
         self.spinBox_3 = QtWidgets.QSpinBox(self.frame_11)
+        self.spinBox_3.setMaximumSize(QtCore.QSize(40, 16777215))
         self.spinBox_3.setButtonSymbols(QtWidgets.QAbstractSpinBox.PlusMinus)
         self.spinBox_3.setMinimum(1)
         self.spinBox_3.setObjectName("spinBox_3")
@@ -1217,8 +1217,8 @@ class Ui_mainWindow(object):
         self.horizontalLayout_10.setContentsMargins(10, 10, 10, 10)
         self.horizontalLayout_10.setSpacing(15)
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
-        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_10.addItem(spacerItem7)
+        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_10.addItem(spacerItem6)
         self.pushButton_20 = QtWidgets.QPushButton(self.frame_13)
         self.pushButton_20.setMinimumSize(QtCore.QSize(60, 30))
         self.pushButton_20.setStyleSheet("QPushButton {\n"
@@ -1239,8 +1239,8 @@ class Ui_mainWindow(object):
 "")
         self.pushButton_19.setObjectName("pushButton_19")
         self.horizontalLayout_10.addWidget(self.pushButton_19)
-        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_10.addItem(spacerItem8)
+        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_10.addItem(spacerItem7)
         self.verticalLayout_16.addLayout(self.horizontalLayout_10)
         self.verticalLayout_18.addWidget(self.splitter_4)
         self.horizontalLayout.addWidget(self.splitter)
@@ -1273,7 +1273,6 @@ class Ui_mainWindow(object):
         self.treeWidget_5.headerItem().setText(3, _translate("mainWindow", "深度"))
         self.treeWidget_5.headerItem().setText(4, _translate("mainWindow", "时间"))
         self.treeWidget_5.headerItem().setText(5, _translate("mainWindow", "时间差"))
-        self.pushButton.setText(_translate("mainWindow", "重新排序"))
         self.pushButton_2.setText(_translate("mainWindow", "删除选中行"))
         self.pushButton_3.setText(_translate("mainWindow", "导出"))
         self.label_7.setText(_translate("mainWindow", " 图片预览"))
@@ -1298,10 +1297,8 @@ class Ui_mainWindow(object):
         self.pushButton_11.setText(_translate("mainWindow", "暂停"))
         self.pushButton_12.setText(_translate("mainWindow", "步进"))
         self.pushButton_13.setText(_translate("mainWindow", "步退"))
-        self.pushButton_14.setText(_translate("mainWindow", "倒放"))
         self.label_22.setText(_translate("mainWindow", "跳帧到:"))
         self.pushButton_17.setText(_translate("mainWindow", "查找"))
-        self.checkBox_4.setText(_translate("mainWindow", "是否识别时间"))
         self.label_18.setText(_translate("mainWindow", "帧号:"))
         self.label_4.setText(_translate("mainWindow", "时间:"))
         self.lineEdit_5.setText(_translate("mainWindow", "00:00:00"))
@@ -1317,12 +1314,12 @@ class Ui_mainWindow(object):
         self.pushButton_4.setText(_translate("mainWindow", "重置"))
         self.pushButton_5.setText(_translate("mainWindow", "确定"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("mainWindow", "设 置"))
-        self.label_25.setText(_translate("mainWindow", "接箍预览"))
+        self.label_25.setText(_translate("mainWindow", " 接箍预览"))
         self.label_28.setText(_translate("mainWindow", "当前接箍号 0 深度 0 M"))
         self.label_31.setText(_translate("mainWindow", "当前接箍编号 0 接箍总数 0"))
         self.label_26.setText(_translate("mainWindow", "接箍号跳转到"))
         self.pushButton_18.setText(_translate("mainWindow", "查找"))
-        self.label_29.setText(_translate("mainWindow", "预览速度/间隔(秒)"))
+        self.label_29.setText(_translate("mainWindow", "   预览速度/间隔(秒)"))
         self.label_6.setText(_translate("mainWindow", "进度0%"))
         self.pushButton_20.setText(_translate("mainWindow", "从头开始"))
         self.pushButton_19.setText(_translate("mainWindow", "暂停/继续"))

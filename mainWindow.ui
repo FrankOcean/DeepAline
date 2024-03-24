@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1440</width>
+    <width>1640</width>
     <height>960</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1420</width>
+    <width>1440</width>
     <height>914</height>
    </size>
   </property>
@@ -481,13 +481,13 @@ border-radius:0px;</string>
                  <property name="minimumSize">
                   <size>
                    <width>141</width>
-                   <height>20</height>
+                   <height>30</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
                    <width>290</width>
-                   <height>20</height>
+                   <height>30</height>
                   </size>
                  </property>
                  <property name="font">
@@ -622,27 +622,6 @@ QTreeWidget::item:selected {
                <number>3</number>
               </property>
               <item>
-               <widget class="QPushButton" name="pushButton">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>22</height>
-                 </size>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QPushButton {
-    border-radius: 3px;
-	background-color: white;
-	border: 1px solid orange;
-}
-</string>
-                </property>
-                <property name="text">
-                 <string>重新排序</string>
-                </property>
-               </widget>
-              </item>
-              <item>
                <widget class="QPushButton" name="pushButton_2">
                 <property name="minimumSize">
                  <size>
@@ -695,7 +674,7 @@ QTreeWidget::item:selected {
       <widget class="QFrame" name="frame_2">
        <property name="minimumSize">
         <size>
-         <width>640</width>
+         <width>800</width>
          <height>0</height>
         </size>
        </property>
@@ -836,7 +815,7 @@ border-radius:0px;</string>
                  <property name="minimumSize">
                   <size>
                    <width>640</width>
-                   <height>480</height>
+                   <height>600</height>
                   </size>
                  </property>
                  <property name="styleSheet">
@@ -1006,6 +985,12 @@ border-radius:0px;</string>
            </layout>
           </widget>
           <widget class="QFrame" name="frame_4">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>229</height>
+            </size>
+           </property>
            <property name="styleSheet">
             <string notr="true">background-color: white;
 border: 1px solid gray; 
@@ -1013,6 +998,21 @@ border-radius:0px;
 </string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_8">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>9</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>9</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
              <widget class="QLabel" name="label_11">
               <property name="minimumSize">
@@ -1066,6 +1066,9 @@ border-radius:0px;
               <layout class="QVBoxLayout" name="verticalLayout_9">
                <property name="spacing">
                 <number>9</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
                </property>
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_14">
@@ -1212,9 +1215,9 @@ border: 0px;</string>
                  <property name="font">
                   <font>
                    <family>Times New Roman</family>
-                   <pointsize>10</pointsize>
-                   <weight>75</weight>
-                   <bold>true</bold>
+                   <pointsize>8</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
                   </font>
                  </property>
                  <property name="styleSheet">
@@ -1357,6 +1360,12 @@ border: 1px solid rgb(209,209,209);
         <size>
          <width>511</width>
          <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>511</width>
+         <height>16777215</height>
         </size>
        </property>
        <property name="styleSheet">
@@ -1573,23 +1582,10 @@ QLabel {
                   </widget>
                  </item>
                  <item>
-                  <spacer name="horizontalSpacer_4">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
                   <widget class="QLabel" name="label_15">
                    <property name="maximumSize">
                     <size>
-                     <width>35</width>
+                     <width>40</width>
                      <height>16777215</height>
                     </size>
                    </property>
@@ -1602,18 +1598,26 @@ QLabel {
                    <property name="text">
                     <string>倍速</string>
                    </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
                   </widget>
                  </item>
                  <item>
                   <widget class="QSpinBox" name="spinBox">
                    <property name="maximumSize">
                     <size>
-                     <width>45</width>
+                     <width>35</width>
                      <height>16777215</height>
                     </size>
                    </property>
                    <property name="styleSheet">
-                    <string notr="true">color: white;</string>
+                    <string notr="true">QSpinBox {
+	background-color: white;
+	border: 1px solid white;
+	color: black;
+}
+</string>
                    </property>
                    <property name="minimum">
                     <number>1</number>
@@ -1627,7 +1631,7 @@ QLabel {
                   <widget class="QLabel" name="label_21">
                    <property name="maximumSize">
                     <size>
-                     <width>50</width>
+                     <width>60</width>
                      <height>16777215</height>
                     </size>
                    </property>
@@ -1640,12 +1644,32 @@ QLabel {
                    <property name="text">
                     <string>步进值</string>
                    </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
                   </widget>
                  </item>
                  <item>
                   <widget class="QSpinBox" name="spinBox_2">
+                   <property name="minimumSize">
+                    <size>
+                     <width>35</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>35</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
                    <property name="styleSheet">
-                    <string notr="true">color: white;</string>
+                    <string notr="true">QSpinBox {
+	background-color: white;
+	border: 1px solid white;
+	color: black;
+}
+</string>
                    </property>
                    <property name="minimum">
                     <number>1</number>
@@ -1753,27 +1777,6 @@ QLabel {
                    </property>
                    <property name="text">
                     <string>步退</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="pushButton_14">
-                   <property name="minimumSize">
-                    <size>
-                     <width>0</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">QPushButton {
-    border-radius: 3px;
-	background-color: rgb(32,32,32);
-	border: 1px solid black;
-	color: cyan; 
-}</string>
-                   </property>
-                   <property name="text">
-                    <string>倒放</string>
                    </property>
                   </widget>
                  </item>
@@ -1891,6 +1894,12 @@ border-radius:0px;</string>
                      </property>
                      <item>
                       <widget class="QLabel" name="label_22">
+                       <property name="minimumSize">
+                        <size>
+                         <width>50</width>
+                         <height>0</height>
+                        </size>
+                       </property>
                        <property name="maximumSize">
                         <size>
                          <width>60</width>
@@ -1970,20 +1979,6 @@ border-radius:0px;</string>
                       </spacer>
                      </item>
                      <item>
-                      <widget class="QCheckBox" name="checkBox_4">
-                       <property name="styleSheet">
-                        <string notr="true">border-radius: 0px;
-border: 0px;</string>
-                       </property>
-                       <property name="text">
-                        <string>是否识别时间</string>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
                       <spacer name="horizontalSpacer_6">
                        <property name="orientation">
                         <enum>Qt::Horizontal</enum>
@@ -2013,7 +2008,7 @@ border: 0px;</string>
                       <widget class="QLabel" name="label_18">
                        <property name="maximumSize">
                         <size>
-                         <width>16777215</width>
+                         <width>500</width>
                          <height>20</height>
                         </size>
                        </property>
@@ -2483,6 +2478,18 @@ border-radius:0px;</string>
            </layout>
           </widget>
           <widget class="QFrame" name="frame_13">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>229</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>229</height>
+            </size>
+           </property>
            <property name="styleSheet">
             <string notr="true">background-color: white;
 border: 1px solid gray; 
@@ -2496,7 +2503,7 @@ border-radius:0px;</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_16">
             <property name="spacing">
-             <number>6</number>
+             <number>0</number>
             </property>
             <property name="leftMargin">
              <number>9</number>
@@ -2538,12 +2545,18 @@ border-radius:0px;</string>
 }</string>
               </property>
               <property name="text">
-               <string>接箍预览</string>
+               <string> 接箍预览</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QFrame" name="frame_11">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>127</height>
+               </size>
+              </property>
               <property name="styleSheet">
                <string notr="true">QFrame {
 	background-color: white;
@@ -2620,6 +2633,9 @@ border-radius:0px;</string>
                    <property name="text">
                     <string>当前接箍编号 0 接箍总数 0</string>
                    </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
                   </widget>
                  </item>
                 </layout>
@@ -2627,15 +2643,18 @@ border-radius:0px;</string>
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_12">
                  <property name="spacing">
-                  <number>5</number>
+                  <number>0</number>
                  </property>
                  <item>
                   <widget class="QLabel" name="label_26">
                    <property name="maximumSize">
                     <size>
-                     <width>105</width>
+                     <width>75</width>
                      <height>16777215</height>
                     </size>
+                   </property>
+                   <property name="layoutDirection">
+                    <enum>Qt::LeftToRight</enum>
                    </property>
                    <property name="styleSheet">
                     <string notr="true">QLabel {
@@ -2645,6 +2664,9 @@ border-radius:0px;</string>
                    </property>
                    <property name="text">
                     <string>接箍号跳转到</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                    </property>
                   </widget>
                  </item>
@@ -2658,7 +2680,7 @@ border-radius:0px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>60</width>
+                     <width>90</width>
                      <height>16777215</height>
                     </size>
                    </property>
@@ -2676,13 +2698,13 @@ border-radius:0px;</string>
                   <widget class="QPushButton" name="pushButton_18">
                    <property name="minimumSize">
                     <size>
-                     <width>25</width>
+                     <width>60</width>
                      <height>25</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>40</width>
+                     <width>60</width>
                      <height>16777215</height>
                     </size>
                    </property>
@@ -2715,12 +2737,21 @@ border-radius:0px;</string>
 }</string>
                    </property>
                    <property name="text">
-                    <string>预览速度/间隔(秒)</string>
+                    <string>   预览速度/间隔(秒)</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                    </property>
                   </widget>
                  </item>
                  <item>
                   <widget class="QSpinBox" name="spinBox_3">
+                   <property name="maximumSize">
+                    <size>
+                     <width>40</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
                    <property name="buttonSymbols">
                     <enum>QAbstractSpinBox::PlusMinus</enum>
                    </property>

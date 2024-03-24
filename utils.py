@@ -12,7 +12,7 @@ from PyQt5.QtCore import pyqtSignal, QObject
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import QMessageBox
 import numpy as np
-import easyocr
+# import easyocr
 import re
 from datetime import datetime
 
@@ -396,25 +396,25 @@ def show_info_message_box(title="删除", msg="确定删除?"):
     return reply == QMessageBox.No
 
 # 识别图片文字
-def ocr_image(image_path_or_object):
-    # 判断 image_path_or_object 是否是已读取的图像对象
-    if isinstance(image_path_or_object, (str, bytes)):
-        # 如果是字符串或字节数组，则使用 cv2.imread 加载图像
-        image = cv2.imread(image_path_or_object)
-    else:
-        # 否则，将其视为已读取的图像对象
-        image = image_path_or_object
-
-    # 获取图像宽度和高度
-    # height, width = image.shape[:2]
-    #
-    # # 划分成四个区域（左上、左下、右下、右上）, 识别右上角
-    # right_top = image[0:height // 2, width // 2:width]
-    reader = easyocr.Reader(['ch_sim', 'en'])
-    result = reader.readtext(image)
-    # 提取识别结果
-    text_list = [res[1] for res in result]
-    return text_list
+# def ocr_image(image_path_or_object):
+#     # 判断 image_path_or_object 是否是已读取的图像对象
+#     if isinstance(image_path_or_object, (str, bytes)):
+#         # 如果是字符串或字节数组，则使用 cv2.imread 加载图像
+#         image = cv2.imread(image_path_or_object)
+#     else:
+#         # 否则，将其视为已读取的图像对象
+#         image = image_path_or_object
+#
+#     # 获取图像宽度和高度
+#     # height, width = image.shape[:2]
+#     #
+#     # # 划分成四个区域（左上、左下、右下、右上）, 识别右上角
+#     # right_top = image[0:height // 2, width // 2:width]
+#     reader = easyocr.Reader(['ch_sim', 'en'])
+#     result = reader.readtext(image)
+#     # 提取识别结果
+#     text_list = [res[1] for res in result]
+#     return text_list
 
 # 判断时间格式是否符合标准，类似'01:49:3?'
 def extract_valid_time(time_str):

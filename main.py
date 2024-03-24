@@ -1,4 +1,5 @@
 import os
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
 import sys
 from mainWindow import Ui_mainWindow
 from PyQt5 import QtWidgets, QtGui, QtCore, QtMultimedia
@@ -58,9 +59,14 @@ class Modifier(Ui_mainWindow):
 
         # 记录上一个视频的最后深度
         self.last_depth = 0
+        self.current_depth_text = "0"
 
     # 在这个类中，修改mainwindow的属性或添加其他功能
     def modify_frame(self):
+
+        # 连接信号到槽, 更新进度条拖动后，帧号的变动
+        self.player.positionChangedSignal.connect(self.updatePosition)
+
         # 设置默认显示第一个tab
         self.tabWidget.setCurrentIndex(0)
 
@@ -98,7 +104,8 @@ class Modifier(Ui_mainWindow):
         self.pushButton_13.clicked.connect(self.backSlider)
 
         # self.pushButton_14 添加点击事件, 视频倒放
-        self.pushButton_14.clicked.connect(self.reversePlayback)
+        # TODO: # 倒放功能
+        # self.pushButton_14.clicked.connect(self.reversePlayback)
 
         # self.pushButton_15 添加点击事件, 对当前帧进行截图并保存,保存的目录由用户决定
         self.pushButton_15.clicked.connect(self.takeScreenshot)
@@ -130,8 +137,8 @@ class Modifier(Ui_mainWindow):
         # 删除选中行
         self.pushButton_2.clicked.connect(self.delete_seleted_row)
 
-        # 重新排序
-        self.pushButton.clicked.connect(self.sort_picture_items)
+        # TODO:重新排序
+        # self.pushButton.clicked.connect(self.sort_picture_items)
 
         # 导出为excel
         self.pushButton_3.clicked.connect(self.export_to_excel)
@@ -174,13 +181,13 @@ class Modifier(Ui_mainWindow):
     def onBrightnessSliderValueChanged(self):
         if len(self.selected_video_path) != 0:
             _, position = self.player.getCurrentProgress()
-            self.display_frame(self.selected_video_path, position, self.picture_label)
+            self.display_frame(self.selected_video_path, position, self.picture_label, self.current_depth_text)
 
     # 当对比度更新时
     def onContrastSliderValueChanged(self):
         if len(self.selected_video_path) != 0:
             _, position = self.player.getCurrentProgress()
-            self.display_frame(self.selected_video_path, position, self.picture_label)
+            self.display_frame(self.selected_video_path, position, self.picture_label, self.current_depth_text)
 
     # 加载默认配置
     def load_defaults_settings(self):
@@ -301,6 +308,9 @@ class Modifier(Ui_mainWindow):
 
     def update_preview_progress_bar(self):
         idx = self.current_scatch  # idx 序号
+        if len(self.current_item_data) == 0:
+            show_warning_message_box("没有数据")
+            return
 
         if self.current_scatch > len(self.current_item_data):
             self.timer1.stop()
@@ -346,30 +356,35 @@ class Modifier(Ui_mainWindow):
             return
         cur_frame = int(self.lineEdit.text())
         total_frame = self.cur_total_frames
-        position = cur_frame * 100 * 1000 / total_frame
+        position = cur_frame * 100 * 1000 * 6 / total_frame
         self.player.mediaPlayer.setPosition(int(position))
         self.player.mediaPlayer.pause()
         self.timer.stop()
 
         # 将帧图像转换为QPixmap并显示在QLabel上
-        self.display_frame(self.selected_video_path, cur_frame, self.picture_label)
-        self.label_16.setProperty("text", "当前播放帧号 {} 总帧数 {}".format(cur_frame, self.cur_total_frames))
+        isok = self.display_frame(self.selected_video_path, cur_frame, self.picture_label)
+        if isok:
+            self.label_16.setProperty("text", "当前播放帧号 {} 总帧数 {}".format(cur_frame, self.cur_total_frames))
+        self.frameLineEdit.setText("".format(cur_frame))
 
     def find_jump_to_frame(self):
         # 用户填写的接箍号
+        if len(self.lineEdit_2.text()) == 0:
+            show_warning_message_box("未输入接箍号")
+            return
         usr_idx = int(self.lineEdit_2.text())
         if len(self.selected_video_path) == 0 or usr_idx > len(self.current_item_data) or usr_idx < 1:
             return
         item = self.current_item_data[usr_idx-1]
         cur_frame = int(item[0])  # 帧号
         total_frame = self.cur_total_frames
-        position = cur_frame * 100 * 1000 / total_frame
+        position = cur_frame * 100 * 1000 * 6 / total_frame
         self.player.mediaPlayer.setPosition(int(position))
         self.player.mediaPlayer.pause()
         self.timer.stop()
 
         # 将帧图像转换为QPixmap并显示在QLabel上
-        self.display_frame(self.selected_video_path, cur_frame, self.picture_label)
+        self.display_frame(self.selected_video_path, cur_frame, self.picture_label, "{}".format(item[1]))
 
         self.label_16.setProperty("text", "当前播放帧号 {} 总帧数 {}".format(cur_frame, self.cur_total_frames))
 
@@ -546,8 +561,18 @@ class Modifier(Ui_mainWindow):
             self.jie_gu_count = len(data)
 
             # 当点击接箍item时，更新位置列表对应的图片
-            position = int(idx_frame) / total_frame
-            self.display_frame(self.selected_video_path, position, self.picture_label)
+            cur_frame = int(idx_frame)
+            total_frame = self.cur_total_frames
+            position = cur_frame * 100 * 1000 * 6 / total_frame
+            self.player.mediaPlayer.setPosition(int(position))
+            self.player.mediaPlayer.pause()
+            self.timer.stop()
+
+            # 将帧图像转换为QPixmap并显示在QLabel上
+            isok = self.display_frame(self.selected_video_path, cur_frame, self.picture_label, frame_depth)
+            if isok:
+                self.label_16.setProperty("text", "当前播放帧号 {} 总帧数 {}".format(cur_frame, self.cur_total_frames))
+
 
     def jiegu_widget_item_double_click(self):
         selected_items = self.treeWidget_5.selectedItems()
@@ -592,19 +617,20 @@ class Modifier(Ui_mainWindow):
             self.frameLineEdit.setText(str(current_frame))
             #self.lineEdit_5.setText(cur_duration)
             # 识别图像上的时间并填写到lineEdit_5上
-            start = time.time()
+            # start = time.time()
             cap = cv2.VideoCapture(self.selected_video_path)
             cap.set(cv2.CAP_PROP_POS_FRAMES, position)  # 设置当前帧位置
-            ret, frame = cap.read()  # 读取当前帧
-            if ret and self.checkBox_4.isChecked():
-                text_list = ocr_image(frame)
-                print(text_list)
-                print("识别时间:", time.time() - start)
-                if len(text_list) > 1:
-                    valid_time = text_list[1]
-                else:
-                    valid_time = "未识别"
-                self.lineEdit_5.setText(valid_time)
+            # TODO:  #识别时间
+            # ret, frame = cap.read()  # 读取当前帧
+            # if ret and self.checkBox_4.isChecked():
+            #     text_list = ocr_image(frame)
+            #     print(text_list)
+            #     print("识别时间:", time.time() - start)
+            #     if len(text_list) > 1:
+            #         valid_time = text_list[1]
+            #     else:
+            #         valid_time = "未识别"
+            #     self.lineEdit_5.setText(valid_time)
 
             is_end, current_frame = self.player.getCurrentProgress()
             if is_end:
@@ -617,10 +643,14 @@ class Modifier(Ui_mainWindow):
             self.player.mediaPlayer.play()
             self.timer.start(40)
 
-    def display_frame(self, video_path, position, label):
+    def display_frame(self, video_path, position, label, deep_text=""):
         cap = cv2.VideoCapture(video_path)
         cap.set(cv2.CAP_PROP_POS_FRAMES, position)  # 设置当前帧位置
         ret, frame = cap.read()  # 读取当前帧
+
+        if not ret:
+            show_warning_message_box("帧率设置太大，超过范围")
+            return False
 
         print("CheckBox is checked:", self.checkBox_2.isChecked())
         # 如果启用图像增强
@@ -651,10 +681,15 @@ class Modifier(Ui_mainWindow):
             # 计算插值
             avg_deep = (last_depth - first_depth) / (last_frame - first_frame)
             f0_deepth = first_depth - avg_deep * first_depth
-            # 计算current_depth
-            current_depth = position * avg_deep + f0_deepth
-            # 在视频帧上添加深度信息水印
-            depth_text = f"{current_depth:.3f} m"
+            # warning: 这里需要改
+            if len(deep_text) == 0:
+                current_depth = position * avg_deep + f0_deepth
+                # 在视频帧上添加深度信息水印
+                depth_text = f"{current_depth:.3f} m"
+                self.current_depth_text = current_depth
+            else:
+                depth_text = "{} m".format(deep_text)
+                self.current_depth_text = deep_text
             # 添加一个透明的黄色背景在depth_text下面
             depth_text_size = cv2.getTextSize(depth_text, cv2.FONT_HERSHEY_SIMPLEX, float(font_size), 2)[0]
             # 计算矩形的大小和位置
@@ -679,11 +714,14 @@ class Modifier(Ui_mainWindow):
             label.setText('Error: Failed to read frame')
 
         cap.release()
+        return True
 
     def backSlider(self):
         # if self.player.mediaPlayer.state() == QtMultimedia.QMediaPlayer.PlayingState:
-        j_miao = int(1000/25 * int(self.spinBox_2.text()))
-        self.player.mediaPlayer.setPosition(self.player.mediaPlayer.position() - j_miao)  # 1000/25秒，每次走一帧
+        cap = cv2.VideoCapture(self.selected_video_path)
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        j_miao = int(1000/fps * int(self.spinBox_2.text()))
+        self.player.mediaPlayer.setPosition(self.player.mediaPlayer.position() - j_miao)  # 1000/帧率，每次走一帧
         # 接箍对深 帧号填写
         _, position = self.player.getCurrentProgress()
         # 将帧图像转换为QPixmap并显示在QLabel上
@@ -694,8 +732,10 @@ class Modifier(Ui_mainWindow):
         #self.lineEdit_5.setText(cur_duration)
 
     def forwardSlider(self):
+        cap = cv2.VideoCapture(self.selected_video_path)
+        fps = cap.get(cv2.CAP_PROP_FPS)
         # if self.player.mediaPlayer.state() == QtMultimedia.QMediaPlayer.PlayingState:
-        j_miao = int(1000/25 * int(self.spinBox_2.text()))
+        j_miao = int(1000/fps * int(self.spinBox_2.text()))
         self.player.mediaPlayer.setPosition(self.player.mediaPlayer.position() + j_miao)
         # 接箍对深 帧号填写
         _, position = self.player.getCurrentProgress()
@@ -751,29 +791,18 @@ class Modifier(Ui_mainWindow):
 
         data = self.current_item_data
 
-        # 计算平均深度
-        try:
-            first_frame, first_depth, _ = data[0]
-            last_frame, last_depth, _ = data[-1]
-        except:
-            first_frame, first_depth = data[0]
-            last_frame, last_depth = data[-1]
-        # 计算插值
-        avg_deep = (last_depth - first_depth) / (last_frame - first_frame)
-        f0_deepth = first_depth - avg_deep * first_depth
-        # 计算current_depth
-        current_depth = position * avg_deep + f0_deepth
-        # 在视频帧上添加深度信息水印
-        depth_text = f"{current_depth:.3f} m"
-        # 添加一个透明的黄色背景在depth_text下面
-        depth_text_size = cv2.getTextSize(depth_text, cv2.FONT_HERSHEY_SIMPLEX, font_size, 2)[0]
-        # 计算矩形的大小和位置
-        rect_top_left = (x, y - 10)
-        rect_bottom_right = (x + depth_text_size[0], y + depth_text_size[1] + 10)
-        # 绘制填充矩形
-        cv2.rectangle(frame, rect_top_left, rect_bottom_right, background_color, -1)
-        # 绘制文本
-        cv2.putText(frame, depth_text, (x, depth_text_size[1] + y), cv2.FONT_HERSHEY_SIMPLEX, font_size, font_color, 2, cv2.LINE_AA)
+        if len(data) > 1:
+            # 计算平均深度
+            depth_text = f"{self.current_depth_text:.3f} m"
+            # 添加一个透明的黄色背景在depth_text下面
+            depth_text_size = cv2.getTextSize(depth_text, cv2.FONT_HERSHEY_SIMPLEX, font_size, 2)[0]
+            # 计算矩形的大小和位置
+            rect_top_left = (x, y - 10)
+            rect_bottom_right = (x + depth_text_size[0], y + depth_text_size[1] + 10)
+            # 绘制填充矩形
+            cv2.rectangle(frame, rect_top_left, rect_bottom_right, background_color, -1)
+            # 绘制文本
+            cv2.putText(frame, depth_text, (x, depth_text_size[1] + y), cv2.FONT_HERSHEY_SIMPLEX, font_size, font_color, 2, cv2.LINE_AA)
 
         # 将帧保存为图片
         cv2.imwrite(fileName, frame)
@@ -807,9 +836,9 @@ class Modifier(Ui_mainWindow):
             return
 
         # 检测时间格式是否正确
-        if not is_valid_time_format(flag_time):
-            show_warning_message_box("时间格式不正确")
-            return
+        # if not is_valid_time_format(flag_time):
+        #     show_warning_message_box("时间格式不正确")
+        #     return
 
         # 从deepth文件夹中对应的文本文件读取序号和深度信息, 如果读取不到设置序号为0
         db_path = "deepth/" + self.current_video + ".db"
@@ -1098,6 +1127,12 @@ class Modifier(Ui_mainWindow):
     def resetting_video_watermark(self):
         if os.path.exists(watermark_save_path):
             os.remove(watermark_save_path)
+
+    def updatePosition(self, position):
+        print("position == ", position)
+        _, current_frame = self.player.get_current_frame()
+        self.frameLineEdit.setText(str(current_frame))
+        self.label_16.setProperty("text", "当前播放帧号 {} 总帧数 {}".format(current_frame, self.cur_total_frames))
 
 
 if __name__ == '__main__':

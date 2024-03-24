@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5.QtGui import QKeySequence, QIcon, QPalette
-from PyQt5.QtCore import QDir, Qt, QUrl, QPoint, QTime
+from PyQt5.QtCore import QDir, Qt, QUrl, QPoint, QTime, pyqtSignal
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer, QVideoProbe
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QLineEdit,
@@ -12,6 +12,8 @@ import subprocess
 #QT_DEBUG_PLUGINS
 
 class VideoPlayer(QWidget):
+
+    positionChangedSignal = pyqtSignal(float)  # 定义一个信号
 
     def __init__(self, aPath, parent=None):
         super(VideoPlayer, self).__init__(parent)
@@ -157,6 +159,8 @@ class VideoPlayer(QWidget):
         mtime = QTime(0, 0, 0, 0)
         mtime = mtime.addMSecs(self.mediaPlayer.position())
         self.lbl.setText(mtime.toString())
+        # 触发更新标签的信号
+        self.positionChangedSignal.emit(position)  # 发出信号
 
     def durationChanged(self, duration):
         self.positionSlider.setRange(0, duration)
